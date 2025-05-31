@@ -36,5 +36,72 @@ export const mockCartItems: CartItem[] = [
     },
     price: 2.0,
     qty: 1
+  },
+  {
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
+  },{
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
+  },{
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
+  },{
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
+  },{
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
+  },{
+    id: "cart-3",
+    product: {
+      id: "3",
+      name: "French Bread",
+      price: 2.0,
+      stock: 40,
+      imageUrl: "https://storage.googleapis.com/uxpilot-auth.appspot.com/882e5c38a4-b2dcf729fe0ac169bdb6.png"
+    },
+    price: 2.0,
+    qty: 1
   }
 ];

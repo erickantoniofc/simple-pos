@@ -95,7 +95,7 @@ export const CustomerSelectComponent = () => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between cursor-pointer"
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
@@ -136,9 +136,9 @@ export const CustomerSelectComponent = () => {
     </div>
     <div className="col-span-1 grid grid-cols-2 gap-1">
 
-        <Button><Edit /></Button>
+        <Button className="text-accent-foreground cursor-pointer"><Edit /></Button>
 
-        <Button><Plus /></Button>
+        <Button className="text-accent-foreground cursor-pointer"><Plus /></Button>
     </div>
         </>
   )

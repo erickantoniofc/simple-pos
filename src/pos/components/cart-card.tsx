@@ -1,7 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Trash2, X, Minus, Plus } from "lucide-react"
+import { Trash2, X, Minus, Plus, Send } from "lucide-react"
 import type { CartItem } from "../types/carditem"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 
 
 
@@ -15,18 +17,18 @@ export const CartCard = ({
 
   return (
     <Card className="w-full h-full flex flex-col">
-      <CardContent className="p-4 flex flex-col flex-1">
+      <CardContent className="p-4 flex flex-col flex-1 h-full gap-4">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Cart</h2>
-          <Button variant="ghost" className="text-destructive">
+          <h2 className="text-lg font-semibold">Comprobante</h2>
+          <Button variant="ghost" className="text-destructive cursor-pointer">
             <Trash2 className="w-4 h-4 mr-1" />
-            Clear
+            Limpiar
           </Button>
         </div>
 
         {/* Cart Items */}
-        <div className="space-y-3 overflow-y-auto max-h-[300px] pr-2">
+        <div className="space-y-3 overflow-y-auto flex-1 pr-2">
           {items.map(item => (
             <div key={item.id} className="flex items-center gap-2 border-b pb-2">
               <img src={item.product.imageUrl} alt={item.product.name} className="w-10 h-10 rounded object-cover" />
@@ -35,26 +37,29 @@ export const CartCard = ({
                 <p className="text-xs text-muted-foreground">{item.product.name}</p>
               </div>
               <div className="flex items-center gap-1">
-                <Button size="icon" variant="outline" >
+                <Button size="icon" variant="outline" className="cursor-pointer" >
                   <Minus className="w-4 h-4" />
                 </Button>
-                <span className="w-4 text-center">{item.qty}</span>
-                <Button size="icon" variant="outline" >
-                  <Plus className="w-4 h-4" />
+                <input className="w-4 text-center" value={item.qty}/>
+                <Button size="icon" variant="outline" className="cursor-pointer">
+                  <Plus className="w-3 h-3" />
                 </Button>
               </div>
+              <div className="space-x-1">
               <span className="w-14 text-right font-medium">
                 ${(item.product.price * item.qty).toFixed(2)}
               </span>
-              <Button size="icon" variant="ghost" className="text-destructive" >
+              <Button size="icon" variant="ghost" className="text-destructive cursor-pointer" >
                 <X className="w-4 h-4" />
               </Button>
+
+              </div>
             </div>
           ))}
         </div>
 
         {/* Totals */}
-        <div className="mt-4 space-y-1 text-sm text-right">
+        <div className="space-y-1 text-sm text-right mt-auto">
           <div className="flex justify-between">
             <span>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
@@ -67,6 +72,10 @@ export const CartCard = ({
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
+          <Button className="w-full h-10 text-accent-foreground cursor-pointer">
+            <Send className="h-4 w-4"/>
+            <p>Enviar DTE</p>
+          </Button>
         </div>
       </CardContent>
     </Card>

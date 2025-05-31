@@ -10,15 +10,10 @@ export const PosPage = () => {
       <div className="md:col-span-2 sm:col-span-1 md:h-[calc(100vh-3rem)]">
         <ProductContainer />
       </div>
-      <div className="md:col-span-1 md:h-[calc(100vh-3rem)] grid grid-rows-5">
-        <div className="row-span-4">
+      <div className="md:col-span-1 md:h-[calc(100vh-3rem)]">
+        
         <CartCard items={mockCartItems} />
 
-        </div>
-        
-        <div className="row-span-1">
-
-        </div>
         
       </div>
       

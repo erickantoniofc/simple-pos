@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PosRoutes } from "@/pos/routes/pos-router";
 import { AuthRoutes } from "@/auth/routes/auth-router";
-import { PosLayout } from "@/pos/layout/pos-layout";
 
 
 export const AppRouter = () => {
   
-    const status = "authenticated";
+    // Example: status should be dynamic, here it's hardcoded for demonstration
+    const status = "unauthenticated" as "authenticated" | "unauthenticated";
 
     return (
 

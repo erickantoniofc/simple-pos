@@ -42,16 +42,7 @@ export const AppSidebar = () => {
                             <SidebarMenuButton tooltip="Facturacion" asChild>
                                 <Link to="facturas">
                                     <FilePlus/>
-                                    <span>Facturacion</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-
-                        <SidebarMenuItem>
-                            <SidebarMenuButton tooltip="Proveedores" asChild>
-                                <Link to="proveedores">
-                                    <FileBox/>
-                                    <span>Proveedores</span>
+                                    <span>Documentos</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

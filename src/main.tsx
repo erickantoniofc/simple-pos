@@ -4,11 +4,17 @@ import './styles/index.css'
 import './styles/globals.css'
 import { SimplePosApp } from '@/simple-pos'
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import { store } from './store/store'
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <Provider store={store}>
     <BrowserRouter>
       <SimplePosApp />
     </BrowserRouter>
+
+    </Provider>
   </StrictMode>,
 )

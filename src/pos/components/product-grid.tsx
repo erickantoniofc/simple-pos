@@ -1,5 +1,5 @@
 import { ProductCard } from "./product-card";
-import type { Product } from "../types/product";
+import type { Product } from "../../mocks/types/product";
 
 export const ProductGrid = ({products} : {products: Product[]}) => {
      return (

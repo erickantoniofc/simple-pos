@@ -1,5 +1,5 @@
 import {Card, CardContent} from "@/components/ui/card"
-import type { Product } from "../types/product"
+import type { Product } from "../../mocks/types/product"
 
 
 export const ProductCard = ({product} : {product: Product}) => {

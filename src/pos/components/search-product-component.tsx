@@ -2,14 +2,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import type { Category } from "@/mocks/types/category";
 
-const categories = ["All", "Beverages", "Snacks", "Bakery", "Dairy", "Produce"]
 
 
-export const AddProductComponent = () => {
-
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-    const toggleCategory = (category: string) => {
+export const SearchProductComponent = () => {
+    const categories = useSelector((state: RootState) => state.categories.categories);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([])
+    const toggleCategory = (category: Category) => {
         setSelectedCategories((prev) => 
             prev.includes(category)
             ? prev.filter((c) => c !== category)
@@ -32,13 +34,13 @@ export const AddProductComponent = () => {
                     const isActive = selectedCategories.includes(category);
                     return (
                     <Button 
-                        key={category} 
+                        key={category._id} 
                         variant={isActive ? "default" : "outline"} 
                         size="sm"
                         onClick={() => toggleCategory(category)}
                         className={isActive ? "text-white cursor-pointer" : "cursor-pointer"}
                         >
-                        {category}
+                        {category.name}
                     </Button>
                 )})
             }

@@ -1,9 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { AddProductComponent } from "./add-product-component";
 import { ProductGrid } from "./product-grid";
-import { mockProducts } from "@/mocks/products";
 import { CustomerSelectComponent } from "./customer-select-component";
 import { DocumentSelectComponent } from "./document-select-component";
+import { SearchProductComponent } from "./search-product-component";
 export const ProductContainer = () => {
     return(
         <Card className="flex flex-row h-full">
@@ -20,12 +19,12 @@ export const ProductContainer = () => {
                 
                 {/* Add Product UI */}
                 <div className="">
-                    <AddProductComponent />
+                    <SearchProductComponent />
                 </div>
 
                 {/* Scrollable Product Grid */}
                 <div className="flex-1 overflow-y-auto">
-                    <ProductGrid products={mockProducts} />
+                    <ProductGrid />
                 </div>
 
             </CardContent>

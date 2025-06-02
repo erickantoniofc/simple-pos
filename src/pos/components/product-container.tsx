@@ -3,7 +3,13 @@ import { ProductGrid } from "./product-grid";
 import { CustomerSelectComponent } from "./customer-select-component";
 import { DocumentSelectComponent } from "./document-select-component";
 import { SearchProductComponent } from "./search-product-component";
+import { useState } from "react";
+import type { Category } from "@/mocks/types/category";
 export const ProductContainer = () => {
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+    const [searchText, setSearchText] = useState("");
+
+      
     return(
         <Card className="flex flex-row h-full">
             <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full">
@@ -19,12 +25,17 @@ export const ProductContainer = () => {
                 
                 {/* Add Product UI */}
                 <div className="">
-                    <SearchProductComponent />
+                    <SearchProductComponent 
+                        selectedCategories={selectedCategories}
+                        setSelectedCategories={setSelectedCategories}
+                        searchText={searchText}
+                        setSearchText={setSearchText} 
+                    />
                 </div>
 
                 {/* Scrollable Product Grid */}
                 <div className="flex-1 overflow-y-auto">
-                    <ProductGrid />
+                    <ProductGrid selectedCategories={selectedCategories} searchText={searchText}/>
                 </div>
 
             </CardContent>

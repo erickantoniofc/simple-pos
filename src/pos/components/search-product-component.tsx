@@ -8,16 +8,18 @@ import type { Category } from "@/mocks/types/category";
 
 
 
-export const SearchProductComponent = () => {
+export const SearchProductComponent = (
+    { selectedCategories, setSelectedCategories, searchText, setSearchText, } 
+    : 
+    {selectedCategories: Category[]; setSelectedCategories: (cats: Category[]) => void; searchText: string; setSearchText: (text: string) => void;}
+    ) => {
     const categories = useSelector((state: RootState) => state.categories.categories);
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>([])
+    
     const toggleCategory = (category: Category) => {
-        setSelectedCategories((prev) => 
-            prev.includes(category)
-            ? prev.filter((c) => c !== category)
-            : [...prev, category]
-        );
-    }
+        selectedCategories.includes(category)
+            ? setSelectedCategories(selectedCategories.filter((c: Category) => c !== category))
+            : setSelectedCategories([...selectedCategories, category]);
+  };
 
   return (
     <div className="space-y-4">
@@ -25,6 +27,8 @@ export const SearchProductComponent = () => {
             <Input 
                 placeholder="Busca un producto o escanea el codigo de barras.."
                 className="flex-1 h-12"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
             />
             <Button className="whitespace-nowrap h-12 text-white cursor-pointer"><Plus/> Agregar producto</Button>
         </div>

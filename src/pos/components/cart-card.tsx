@@ -2,9 +2,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Trash2, X, Minus, Plus, Send } from "lucide-react"
 import type { CartItem } from "../../mocks/types/carditem"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-
 
 
 

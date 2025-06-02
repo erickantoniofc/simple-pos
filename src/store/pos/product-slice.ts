@@ -20,13 +20,20 @@ export const productSlice = createSlice({
         updateProduct: (state, action: PayloadAction<Product>) => {
             state.products = state.products.map(
                 product => 
-                    product.id === action.payload.id
+                    product._id === action.payload._id
                 ? {...product, ...action.payload}
                 : product
             ); 
-        }
+        },
+        deleteProductById: (state, action: PayloadAction<string>) => {
+            const product = state.products.find(p => p._id === action.payload);
+            if(product) {
+                product.active = false;
+            }
+
+        },
     }
 });
 
-export const {updateProduct, addProduct} = productSlice.actions;
+export const {updateProduct, addProduct, deleteProductById} = productSlice.actions;
 export default productSlice.reducer;

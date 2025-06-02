@@ -15,74 +15,16 @@ import {
 } from "@/components/ui/popover"
 import { Check, ChevronsUpDown, Edit, Plus } from "lucide-react"
 import { useState } from "react"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/store/store"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
 
 export const CustomerSelectComponent = () => {
 
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
+
+    const customers = useSelector((state: RootState) => state.customers.customers)
 
   return (
     <>
@@ -98,8 +40,8 @@ export const CustomerSelectComponent = () => {
           className="w-full justify-between cursor-pointer"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Cliente"}
+            ? customers.find((customer) => customer._id === value)?.name
+            : "Seleccionar cliente"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -109,20 +51,20 @@ export const CustomerSelectComponent = () => {
           <CommandList>
             <CommandEmpty>Ningun cliente encontrado...</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {customers.map((customer) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}   
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                  key={customer._id}
+                  value={customer.name}   
+                  onSelect={() => {
+                    setValue(customer._id === value ? "" : customer._id)
                     setOpen(false)
                   }}
                 >
-                  {framework.label}
+                  {customer.name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      value === customer._id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

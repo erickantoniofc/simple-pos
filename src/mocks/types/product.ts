@@ -1,10 +1,10 @@
 export interface Product {
-    id: string;
+    _id: string;
     name: string;
     price: number;
     price1: number;
     price2: number;
     stock: number;
     imageUrl: string;
-    isActive: boolean;
+    active: boolean;
 }

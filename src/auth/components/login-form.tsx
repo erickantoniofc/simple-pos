@@ -71,7 +71,7 @@ export const LoginForm = ({
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full cursor-pointer">
+                <Button type="submit" className="w-full cursor-pointer text-foreground">
                   Acceder
                 </Button>
               </div>

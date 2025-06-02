@@ -12,7 +12,7 @@ export const ProductContainer = () => {
       
     return(
         <Card className="flex flex-row h-full">
-            <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full">
+            <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full w-full">
                 
                 <div className="grid grid-cols-4 gap-2">
                     <div className="col-span-3 grid grid-cols-5 gap-2">
@@ -24,7 +24,7 @@ export const ProductContainer = () => {
                 </div>
                 
                 {/* Add Product UI */}
-                <div className="">
+                <div className="w-full">
                     <SearchProductComponent 
                         selectedCategories={selectedCategories}
                         setSelectedCategories={setSelectedCategories}

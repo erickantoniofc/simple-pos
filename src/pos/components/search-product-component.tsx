@@ -1,10 +1,10 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import type { Category } from "@/mocks/types/category";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 
 
@@ -21,6 +21,14 @@ export const SearchProductComponent = (
             : setSelectedCategories([...selectedCategories, category]);
   };
 
+    const categoriesOnWheelHandler = (e: React.WheelEvent<HTMLDivElement>) => {
+        if (e.deltaY !== 0) {
+            const target = e.currentTarget.querySelector("div");
+            if (target) {
+                target.scrollLeft += e.deltaY;
+            }
+        }
+    }
   return (
     <div className="space-y-4">
         <div className="flex gap-2 w-full">
@@ -32,7 +40,9 @@ export const SearchProductComponent = (
             />
             <Button className="whitespace-nowrap h-12 text-white cursor-pointer"><Plus/> Agregar producto</Button>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <ScrollArea className="w-full whitespace-nowrap overflow-auto" onWheel={categoriesOnWheelHandler}>
+
+        <div className="flex gap-2 w-max pb-1">
             {
                 categories.map((category) => {
                     const isActive = selectedCategories.includes(category);
@@ -49,6 +59,9 @@ export const SearchProductComponent = (
                 )})
             }
         </div>
+        <ScrollBar orientation="horizontal" />
+
+        </ScrollArea>
     </div>
   )
 }

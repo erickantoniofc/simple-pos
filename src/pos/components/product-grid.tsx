@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import type { Product } from "@/mocks/types/product";
 import type { Category } from "@/mocks/types/category";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const ProductGrid = (
   {selectedCategories, searchText,} : {selectedCategories: Category[]; searchText: string;}
@@ -20,10 +21,13 @@ export const ProductGrid = (
 
     
     return (
+      <ScrollArea className="h-full max-h-[calc(100vh-12rem)] pr-2">
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
         {filteredProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
         ))}
         </div>
+      </ScrollArea>
   );
 }

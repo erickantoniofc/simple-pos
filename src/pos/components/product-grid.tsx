@@ -21,9 +21,9 @@ export const ProductGrid = (
 
     
     return (
-      <ScrollArea className="h-full max-h-[calc(100vh-12rem)] pr-2">
+      <ScrollArea className="sm:h-screen md:h-full pr-2">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4 w-full justify-items-center">
         {filteredProducts.map((product) => (
             <ProductCard key={product._id} product={product} />
         ))}

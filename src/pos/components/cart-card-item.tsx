@@ -24,7 +24,7 @@ export const CartCardItem = ({
                 <img src={item.product.imageUrl} alt={item.product.name} className="w-10 h-10 rounded object-cover" />
                 <div className="flex-1">
                   <p className="font-medium">{item.product.name}</p>
-                  <p className="text-xs text-muted-foreground">{item.product.name}</p>
+                  <p className="text-xs text-muted-foreground">{item.product._id}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <Button onClick={() => handleQuantityChange(item.product._id, (item.quantity > 1 ? item.quantity - 1 : 1))} size="icon" variant="outline" className="cursor-pointer" >

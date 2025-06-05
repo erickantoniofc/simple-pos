@@ -21,10 +21,10 @@ export const PosPage = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 px-4 pb-5 box-border">
-      <div className="md:col-span-3 sm:col-span-1 md:h-[calc(100vh-3rem)]">
+      <div className="md:col-span-5 sm:col-span-1 md:h-[calc(100vh-3rem)] lg:col-span-3">
         <ProductContainer />
       </div>
-      <div className="md:col-span-2 md:h-[calc(100vh-3rem)]">
+      <div className="md:col-span-5 lg:h-[calc(100vh-3rem)] lg:col-span-2">
         
         <CartCard sale={activeSale} />
 

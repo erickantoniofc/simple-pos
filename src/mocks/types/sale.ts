@@ -22,6 +22,6 @@ export interface Sale {
     documentType: number; 
     state: number;
     documentNumber: string;
-
+    
 
 }

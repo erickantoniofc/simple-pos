@@ -30,13 +30,21 @@ export const CartCardItem = ({
                   <Button onClick={() => handleQuantityChange(item.product._id, (item.quantity > 1 ? item.quantity - 1 : 1))} size="icon" variant="outline" className="cursor-pointer" >
                     <Minus className="w-4 h-4" />
                   </Button>
-                  <Input className="w-12 p-0 text-center" value={item.quantity} type="number" min={1} onChange={(event) => onInputChange(event, item.product._id)}/>
+                  <Input 
+                    onFocus={(e) => e.target.select()} 
+                    className="w-12 p-0 text-center" 
+                    value={item.quantity} 
+                    type="number" 
+                    min={1} 
+                    onChange={(event) => onInputChange(event, item.product._id)}
+                    />
                   <Button onClick={() => handleQuantityChange(item.product._id, (item.quantity + 1))} size="icon" variant="outline" className="cursor-pointer">
                     <Plus className="w-3 h-3" />
                   </Button>
                   <div className="flex items-center gap-1">
                     <span className="text-xs text-muted-foreground">$/u:</span>
                     <Input
+                      onFocus={(e) => e.target.select()}
                       type="number"
                       className="w-16 p-0 text-center"
                       min={0.01}

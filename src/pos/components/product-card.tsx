@@ -1,10 +1,25 @@
 import {Card, CardContent} from "@/components/ui/card"
 import type { Product } from "../../mocks/types/product"
-
+import { useDispatch } from "react-redux";
+import { addItemToActiveSale } from "@/store/pos/sale-slice";
 
 export const ProductCard = ({product} : {product: Product}) => {
+    
+    const dispatch = useDispatch();
+
+    const onProductClick = () => {
+        dispatch(addItemToActiveSale({
+            product,
+            quantity: 1,
+            price: product.price,
+            discount: 0,
+            subtotal: product.price,
+            total: product.price,
+        }));
+    }
+    
     return(
-        <Card className="w-full max-w-xs shadow-sm hover:scale-[1.01] transition-shadow active:scale-[0.98] cursor-pointer">
+        <Card onClick={onProductClick} className="w-full max-w-xs shadow-sm hover:scale-[1.01] transition-shadow active:scale-[0.98] cursor-pointer">
             <CardContent className="p-4 flex flex-col items-center text-center">
                 <img src={product.imageUrl} alt={product.name} className="w-24 h-24 object-cover rounded-md mb-4"/>
                 <h3 className="text-lg font-semibold">{product.name}</h3>

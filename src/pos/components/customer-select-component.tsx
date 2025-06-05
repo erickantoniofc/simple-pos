@@ -15,17 +15,32 @@ import {
 } from "@/components/ui/popover"
 import { Check, ChevronsUpDown, Edit, Plus } from "lucide-react"
 import { useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
+import type { Customer } from "@/mocks/types/customer"
+import { updateActiveSale } from "@/store/pos/sale-slice"
 
 
 export const CustomerSelectComponent = () => {
 
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState("")
 
-    const customers = useSelector((state: RootState) => state.customers.customers)
+    const customers: Customer[] = useSelector((state: RootState) => state.customers.customers)
+    const activeCustomer = useSelector((state: RootState) => state.sales.activeSale?.customer);
+    const dispatch = useDispatch();
 
+    const onCustomerSelect = (customer: Customer) => {
+      const isSelected = customer._id === activeCustomer?._id;
+        
+      if (!isSelected) {
+        dispatch(updateActiveSale({ customer }));
+      } else {
+        dispatch(updateActiveSale({ customer: undefined })); // opcional si quieres permitir quitarlo
+      }
+
+      setOpen(false)
+
+    }
   return (
     <>
 
@@ -39,8 +54,8 @@ export const CustomerSelectComponent = () => {
           aria-expanded={open}
           className="w-full justify-between cursor-pointer"
         >
-          {value
-            ? customers.find((customer) => customer._id === value)?.name
+          { activeCustomer
+            ? activeCustomer.name
             : "Seleccionar cliente"}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -55,16 +70,13 @@ export const CustomerSelectComponent = () => {
                 <CommandItem
                   key={customer._id}
                   value={customer.name}   
-                  onSelect={() => {
-                    setValue(customer._id === value ? "" : customer._id)
-                    setOpen(false)
-                  }}
+                  onSelect={() => onCustomerSelect(customer)}
                 >
                   {customer.name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === customer._id ? "opacity-100" : "opacity-0"
+                      activeCustomer?._id === customer._id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

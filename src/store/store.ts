@@ -3,12 +3,14 @@ import { productSlice } from "./pos/product-slice";
 import { authSlice } from "./auth/auth-slice";
 import { customerSlice } from "./pos/customer-slice";
 import { categorySlice } from "./pos/category-slice";
+import { saleSlice } from "./pos/sale-slice";
 
 export const store = configureStore({
     reducer: {
         customers: customerSlice.reducer,
         products: productSlice.reducer,
         categories: categorySlice.reducer,
+        sales: saleSlice.reducer,
         auth: authSlice.reducer,
     }
 });

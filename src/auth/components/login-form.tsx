@@ -27,7 +27,6 @@ export const LoginForm = ({
   const {register, handleSubmit, formState: {errors}} = useForm<LoginFormData>({resolver: zodResolver(loginSchema)});
   
   const onSubmitHandler = (data: LoginFormData) => {
-    console.log('Login', data)
     dispatch(login());
   }
 

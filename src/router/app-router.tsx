@@ -8,7 +8,6 @@ import type { RootState } from "@/store/store";
 export const AppRouter = () => {
   
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    console.log(isAuthenticated);
     return (
 
         <Routes>

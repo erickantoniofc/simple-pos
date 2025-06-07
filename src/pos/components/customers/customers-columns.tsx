@@ -1,5 +1,5 @@
 import { type ColumnDef } from "@tanstack/react-table"
-import { type Customer } from "@/mocks/types/customer"
+import { type Customer } from "@/data/types/customer"
 
 export const customerColumns: ColumnDef<Customer>[] = [
   {

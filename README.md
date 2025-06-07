@@ -1,54 +1,89 @@
-# React + TypeScript + Vite
+# 🧾 Sistema POS — React + Vite + TypeScript
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es un sistema de Punto de Venta (POS) desarrollado con React, Redux Toolkit y TypeScript. Permite la gestión de productos, clientes y facturación electrónica.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tecnologías utilizadas
 
-## Expanding the ESLint configuration
+- ⚛️ React 19
+- 🧠 Redux Toolkit
+- 🎨 TailwindCSS
+- 🧪 Zod + React Hook Form
+- ⚡ Vite
+- 🧾 ShadCN/UI
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 Primeros pasos
+
+### 1. Clona el repositorio
+
+```bash
+git clone https://github.com/tu-usuario/tu-proyecto.git
+cd tu-proyecto
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Instala las dependencias
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+yarn install
 ```
+
+### 3. Inicia el servidor de desarrollo
+
+```bash
+yarn dev
+```
+
+---
+
+## 🔧 Comandos disponibles
+
+| Comando        | Descripción                          |
+|----------------|--------------------------------------|
+| `yarn dev`     | Inicia el servidor de desarrollo     |
+| `yarn build`   | Genera el build para producción      |
+| `yarn preview` | Visualiza el build de producción     |
+| `yarn lint`    | Ejecuta ESLint                       |
+
+---
+
+## ✅ Funcionalidades
+
+- 🔍 Búsqueda y gestión de productos y clientes
+- 📋 Formularios con validación dinámica
+- 💾 Manejo de carrito con Redux
+- 🖥️ Interfaz adaptable (responsive) con Tailwind y ShadCN
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+src/
+├─ components/       # Componentes reutilizables
+├─ auth/             # Pantallas de autenticacion / registro
+├─ pos/              # Funcionalidades del sistema POS
+├─ store/            # Slices de Redux y configuración del store
+├─ mocks/            # Datos y catálogos simulados
+└─ App.tsx
+```
+
+---
+
+## 🗂️ Por hacer
+
+- [x] Búsqueda y selección de productos
+- [x] CRUD de clientes
+- [ ] CRUD de productos
+- [ ] CRUD de documentos
+- [ ] Generación de factura electrónica
+- [ ] Vista imprimible
+- [ ] Implementacion de RTK y conexion con backend
+
+---
+
+## 📄 Licencia
+
+MIT

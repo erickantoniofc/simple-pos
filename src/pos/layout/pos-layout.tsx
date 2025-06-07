@@ -1,6 +1,5 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
 import { Outlet } from "react-router-dom"
+import { SidebarProvider, SidebarTrigger, AppSidebar } from "@/components"
 
 export const PosLayout = () => {
   return (

@@ -1,8 +1,7 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useCustomerForm } from "@/hooks/use-customer-form";
+
+import { departamentos } from "@/data/catalogs/departamentos";
+import { municipios } from "@/data/catalogs/municipios";
 
 import {
   Form,
@@ -11,135 +10,32 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
+  Input,
+  Button,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+  DropdownMenu, 
+  DropdownMenuCheckboxItem, 
+  DropdownMenuContent, 
+  DropdownMenuTrigger
+} from "@/components";
+import { CustomerActivityCombobox } from "@/pos/components/customers/customer-activity-combobox";
 
-import { type RootState } from "@/store/store";
-import {
-  addCustomer,
-  updateCustomer,
-  setActiveCustomer,
-  toggleCustomerActive,
-} from "@/store/pos/customer-slice";
 
-import { customerSchema } from "@/mocks/types/customer";
-import type { z } from "zod";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-import { departamentos } from "@/mocks/catalogs/departamentos";
-import { municipios } from "@/mocks/catalogs/municipios";
-import { CustomerActivityCombobox } from "./customer-activity-combobox";
-
-type CustomerFormValues = z.infer<typeof customerSchema>;
 
 export const CustomerForm = () => {
-  const dispatch = useDispatch();
-  const selected = useSelector((state: RootState) => state.customers.selectedCustomer);
-
-  const form = useForm<CustomerFormValues>({
-    resolver: zodResolver(customerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      dui: "",
-      nit: "",
-      nrc: "",
-      activity: undefined,
-      sendMethod: undefined,
-    },
-  });
-
-  useEffect(() => {
-    if (selected) {
-        const convertSendMethod = (method?: number): ("email" | "whatsapp")[] => {
-        if (method === 1) return ["email"];
-        if (method === 2) return ["whatsapp"];
-        if (method === 3) return ["email", "whatsapp"];
-        return [];
-        };
-      form.reset({ ...selected, sendMethod: convertSendMethod(selected.sendMethod) });
-    } else {
-      form.reset({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        dui: "",
-        nit: "",
-        nrc: "",
-        activity: undefined,
-        sendMethod: undefined,
-      });
-    }
-  }, [selected]);
-
-    const getSendMethodValue = (arr?: string[]): number | undefined => {
-    if (!arr || arr.length === 0) return undefined;
-    const hasEmail = arr.includes("email");
-    const hasWhatsapp = arr.includes("whatsapp");
-
-    if (hasEmail && hasWhatsapp) return 3;
-    if (hasEmail) return 1;
-    if (hasWhatsapp) return 2;
-    return undefined;
-    };
-
-  const onSubmit = (data: CustomerFormValues) => {
-    const base = {
-      ...selected,
-      ...data,
-      sendMethod: getSendMethodValue(data.sendMethod),
-      _id: selected?._id || uuidv4(), 
-      active: true,
-    };
-
-    if (selected) {
-      dispatch(updateCustomer(base));
-    } else {
-      dispatch(addCustomer(base));
-    }
-
-    dispatch(setActiveCustomer(null));
-  };
-
-  const formatDui = (value: string) => {
-  const digits = value.replace(/\D/g, "").slice(0, 9); // máx. 9 dígitos (8 + 1)
-  if (digits.length <= 8) return digits;
-  return `${digits.slice(0, 8)}-${digits.slice(8)}`;
-};
-
-  const formatNit = (value: string) => {
-  const digits = value.replace(/\D/g, "").slice(0, 14); // 4 + 6 + 3 + 1 = 14
-  let formatted = "";
-
-  if (digits.length > 0) formatted += digits.slice(0, 4);
-  if (digits.length > 4) formatted += `-${digits.slice(4, 10)}`;
-  if (digits.length > 10) formatted += `-${digits.slice(10, 13)}`;
-  if (digits.length > 13) formatted += `-${digits.slice(13, 14)}`;
-
-  return formatted;
- };
-
- const formatNrc = (value: string) => {
-  const digits = value.replace(/\D/g, "").slice(0, 7); // 6 + 1
-  if (digits.length <= 6) return digits;
-  return `${digits.slice(0, 6)}-${digits.slice(6)}`;
-};
+  
+ const { form, onSubmit, formatDui, formatNit, formatNrc } = useCustomerForm();
 
   return (
         <Form {...form}>
           <form id="customer-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full h-full">
             
+            {/* Nombre o razon social */}
             <FormField
             control={form.control}
             name="name"
@@ -158,6 +54,7 @@ export const CustomerForm = () => {
             )}
             />
 
+            {/* Email y telefono */}
             <div className="flex gap-4">
             <FormField
                 control={form.control}
@@ -187,6 +84,7 @@ export const CustomerForm = () => {
             />
             </div>
             
+            {/* Departamento y municipio */}
             <div className="flex gap-4">
                 <FormField
                 control={form.control}
@@ -254,6 +152,7 @@ export const CustomerForm = () => {
                 />
             </div>
 
+            {/* Direccion */}
             <FormField
             control={form.control}
             name="address"
@@ -268,6 +167,7 @@ export const CustomerForm = () => {
             )}
             />
 
+            {/* DUI, NIT y NRC */}
             <div className="flex gap-4">
             <FormField
                 control={form.control}
@@ -310,6 +210,7 @@ export const CustomerForm = () => {
             />
             </div>
 
+            {/* Actividad economica */}
             <FormField
             control={form.control}
             name="activity"

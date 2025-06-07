@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import type { SaleItem } from "@/mocks/types/sale-item";
+import type { SaleItem } from "@/data/types/sale-item";
+import { Button, Input } from "@/components";
 import { Minus, Plus, X } from "lucide-react";
 
 export const CartCardItem = ({

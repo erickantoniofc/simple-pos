@@ -1,9 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
-import { CartCard } from "../components/pos/cart-card";
-import { ProductContainer } from "../components/pos/product-container";
-import type { RootState } from "@/store/store";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { setActiveSale } from "@/store/pos/sale-slice";
+
+import type { RootState } from "@/store/store";
+
+import { CartCard, ProductContainer } from "@/pos/components/pos";
 
 
 

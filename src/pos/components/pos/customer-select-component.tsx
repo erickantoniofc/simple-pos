@@ -1,5 +1,11 @@
+import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+
+import type { RootState } from "@/store/store"
+import type { Customer } from "@/data/types/customer"
+import { updateActiveSale } from "@/store/pos/sale-slice"
+
 import {
   Command,
   CommandEmpty,
@@ -7,18 +13,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import {
+  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components"
 import { Check, ChevronsUpDown, Edit, Plus } from "lucide-react"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "@/store/store"
-import type { Customer } from "@/mocks/types/customer"
-import { updateActiveSale } from "@/store/pos/sale-slice"
+
 
 
 export const CustomerSelectComponent = () => {

@@ -1,17 +1,18 @@
+import { useSelector, useDispatch } from "react-redux";
+import { type RootState } from "@/store/store";
+import { setActiveCustomer, toggleCustomerActive } from "@/store/pos/customer-slice";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { useSelector, useDispatch } from "react-redux";
-import { type RootState } from "@/store/store";
-import { setActiveCustomer, toggleCustomerActive } from "@/store/pos/customer-slice";
-import { CustomerForm } from "@/pos/components/customers/customer-form";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  Button,
+  ScrollArea
+} from "@/components";
 import { Save } from "lucide-react";
+import { CustomerForm } from "@/pos/components/customers/customer-form";
 
 export const CustomerDialog = () => {
   const selected = useSelector((state: RootState) => state.customers.selectedCustomer);

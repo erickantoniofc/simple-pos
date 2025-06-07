@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Category } from '@/mocks/types/category';
-import {mockCategories } from '@/mocks/categories';
+import type { Category } from '@/data/types/category';
+import {mockCategories } from '@/data/mocks/categories';
 
 interface CategoryState {
     categories: Category[];

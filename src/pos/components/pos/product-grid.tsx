@@ -1,9 +1,11 @@
-import { ProductCard } from "./product-card";
 import { useSelector } from "react-redux";
+
 import type { RootState } from "@/store/store";
-import type { Product } from "@/mocks/types/product";
-import type { Category } from "@/mocks/types/category";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Product } from "@/data/types/product";
+import type { Category } from "@/data/types/category";
+
+import { ProductCard } from "@/pos/components/pos";
+import { ScrollArea } from "@/components";
 
 export const ProductGrid = (
   {selectedCategories, searchText,} : {selectedCategories: Category[]; searchText: string;}

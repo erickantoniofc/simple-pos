@@ -1,11 +1,11 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Trash2} from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { type Sale } from "@/mocks/types/sale"
-import { CartCardItem } from "./cart-card-item"
-import { CartCardFooter } from "./cart-card-footer"
 import { useCartSaleLogic } from "@/hooks/use-cart-sale-logic";
+
+import { type Sale } from "@/data/types/sale"
+
+import { Card, CardContent } from "@/components/ui/card"
+import { Button, ScrollArea } from "@/components"
+import { Trash2} from "lucide-react"
+import { CartCardItem, CartCardFooter } from "@/pos/components/pos"
 
 
 export const CartCard = ({

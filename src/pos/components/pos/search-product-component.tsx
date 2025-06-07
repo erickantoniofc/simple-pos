@@ -1,10 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { useSelector } from "react-redux";
+
 import type { RootState } from "@/store/store";
-import type { Category } from "@/mocks/types/category";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import type { Category } from "@/data/types/category";
+
+import { 
+    Input,
+    Button,
+    ScrollArea, 
+    ScrollBar, 
+} from "@/components/";
+import { Plus } from "lucide-react";
 
 
 

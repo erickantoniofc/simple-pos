@@ -1,21 +1,23 @@
+import { useDispatch} from "react-redux"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import {useForm} from "react-hook-form"
+import { login } from "@/store/auth/auth-slice"
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import type { AppDispatch } from "@/store/store"
+import { loginSchema, type LoginFormData } from "@/data/schemas/login-schema";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useDispatch} from "react-redux"
-import { login } from "@/store/auth/auth-slice"
-import type { AppDispatch } from "@/store/store"
+  Input,
+  Label,
+  Button
+} from "@/components"
 
-import {useForm} from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginFormData } from "@/schemas/login-schema";
 
 export const LoginForm = ({
   className,

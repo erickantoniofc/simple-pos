@@ -1,15 +1,20 @@
-import { DataTable } from "@/components/ui/data-table"
-import type { Customer } from "@/mocks/types/customer"
-import { customerColumns } from "./customers-columns"
-import { Card, CardContent } from "@/components/ui/card"
 import { useEffect, useState } from "react"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { useDispatch, useSelector } from "react-redux"
-import { setActiveCustomer } from "@/store/pos/customer-slice"
 import type { RootState } from "@/store/store"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { setActiveCustomer } from "@/store/pos/customer-slice"
+
+import type { Customer } from "@/data/types/customer"
+
+import { 
+  DataTable,
+  Card, 
+  CardContent, 
+  Input,
+  ScrollArea,
+  Button,
+} from "@/components"
+import { customerColumns } from "@/pos/components/customers/customers-columns"
 import { Plus } from "lucide-react"
 
 export const CustomersTableComponent = ({customers} : {customers: Customer[]}) => {

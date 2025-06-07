@@ -1,6 +1,6 @@
-import type { Sale } from "@/mocks/types/sale";
-import { mockProducts } from "@/mocks/products";
-import { mockCustomers } from "@/mocks/customers";
+import type { Sale } from "@/data/types/sale";
+import { mockProducts } from "@/data/mocks/products";
+import { mockCustomers } from "@/data/mocks/customers";
 
 export const mockSales: Sale[] = [
   {

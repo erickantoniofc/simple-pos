@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Check, ChevronsUpDown, House } from "lucide-react";
-import { mockBranches } from '@/mocks/branches';
+import { mockBranches } from '@/data/mocks/branches';
 
 
 export const BranchSwitcher = () => {

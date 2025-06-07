@@ -1,12 +1,14 @@
-import { useDispatch, useSelector } from "react-redux"
-import { CustomersTableComponent } from "../components/customers/customers-table-component"
+import { useSelector } from "react-redux"
+
 import type { RootState } from "@/store/store"
-import type { Customer } from "@/mocks/types/customer";
-import { CustomerDialog } from "../components/customers/customer-dialog";
+import type { Customer } from "@/data/types/customer";
+
+import { CustomersTableComponent, CustomerDialog } from "@/pos/components/customers"
+
 
 export const CustomersPage = () => {
   const customers: Customer[] = useSelector((state: RootState) => state.customers.customers);
-  const dispatch = useDispatch();
+
 
   return (
        <div className="grid grid-cols-1 gap-4 px-4 pb-5 box-border">

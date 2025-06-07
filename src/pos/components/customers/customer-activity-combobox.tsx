@@ -1,21 +1,22 @@
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { actividades } from "@/data/catalogs/activadades-economicas";
+
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+  Button
+} from "@/components";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { actividades } from "@/mocks/catalogs/activadades-economicas";
 
-import { useState } from "react";
+
+
 
 export const CustomerActivityCombobox = ({ field }: { field: any }) => {
   const [open, setOpen] = useState(false);

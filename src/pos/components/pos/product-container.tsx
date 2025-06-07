@@ -1,10 +1,14 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { ProductGrid } from "./product-grid";
-import { CustomerSelectComponent } from "../customers/customer-select-component";
-import { DocumentSelectComponent } from "./document-select-component";
-import { SearchProductComponent } from "./search-product-component";
 import { useState } from "react";
-import type { Category } from "@/mocks/types/category";
+
+import type { Category } from "@/data/types/category";
+
+import { Card, CardContent } from "@/components";
+import { 
+    CustomerSelectComponent,
+    DocumentSelectComponent,
+    SearchProductComponent,
+    ProductGrid
+ } from "@/pos/components/pos"
 export const ProductContainer = () => {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [searchText, setSearchText] = useState("");

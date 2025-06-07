@@ -1,3 +1,8 @@
+import { useDispatch, useSelector } from "react-redux";
+import { updateActiveSale } from "@/store/pos/sale-slice";
+
+import type { RootState } from "@/store/store";
+
 import {
   Select,
   SelectContent,
@@ -6,11 +11,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components"
 
-import { useDispatch, useSelector } from "react-redux";
-import { updateActiveSale } from "@/store/pos/sale-slice";
-import type { RootState } from "@/store/store";
 
 
 export const DocumentSelectComponent = () => {

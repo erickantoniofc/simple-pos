@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Customer } from '@/mocks/types/customer';
-import {mockCustomers } from '@/mocks/customers';
+import type { Customer } from '@/data/types/customer';
+import {mockCustomers } from '@/data/mocks/customers';
 
 interface CustomerState {
     customers: Customer[],

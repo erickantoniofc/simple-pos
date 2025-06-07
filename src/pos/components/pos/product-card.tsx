@@ -1,7 +1,9 @@
-import {Card, CardContent} from "@/components/ui/card"
-import type { Product } from "../../../mocks/types/product"
 import { useDispatch } from "react-redux";
 import { addItemToActiveSale } from "@/store/pos/sale-slice";
+
+import type { Product } from "../../../data/types/product"
+
+import {Card, CardContent} from "@/components"
 
 export const ProductCard = ({product} : {product: Product}) => {
     

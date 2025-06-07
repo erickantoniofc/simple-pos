@@ -1,5 +1,5 @@
+import { DocumentType } from "@/data/types/sale";
 import { Button } from "@/components/ui/button"
-import { DocumentType } from "@/mocks/types/sale";
 import { Plus, Save, Send } from "lucide-react"
 
 export const CartCardFooter = (

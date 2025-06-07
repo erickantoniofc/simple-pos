@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { CartCard } from "../components/cart-card";
-import { ProductContainer } from "../components/product-container";
+import { CartCard } from "../components/pos/cart-card";
+import { ProductContainer } from "../components/pos/product-container";
 import type { RootState } from "@/store/store";
 import { useEffect } from "react";
 import { setActiveSale } from "@/store/pos/sale-slice";

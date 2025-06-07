@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import {
   updateItemQuantity,
   removeItemFromActiveSale,

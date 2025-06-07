@@ -3,11 +3,13 @@ import type { Customer } from '@/mocks/types/customer';
 import {mockCustomers } from '@/mocks/customers';
 
 interface CustomerState {
-    customers: Customer[]
+    customers: Customer[],
+    selectedCustomer:  Customer | null | undefined;
 }
 
 const initialState: CustomerState = {
-    customers: mockCustomers
+    customers: mockCustomers,
+    selectedCustomer: undefined,
 }
 
 export const customerSlice = createSlice({
@@ -30,9 +32,18 @@ export const customerSlice = createSlice({
             if(customer) {
                 customer.active = false;
             }
+        },
+        setActiveCustomer: (state, action: PayloadAction<Customer | null | undefined>) => {
+            state.selectedCustomer = action.payload;
+        },
+        toggleCustomerActive: (state, action: PayloadAction<string>) => {
+        const customer = state.customers.find(c => c._id === action.payload);
+        if (customer) {
+            customer.active = !customer.active;
+        }
         }
     }
 });
 
-export const {addCustomer, updateCustomer, deleteCustomerById} = customerSlice.actions;
+export const {setActiveCustomer, addCustomer, updateCustomer, deleteCustomerById, toggleCustomerActive} = customerSlice.actions;
 export default customerSlice.reducer;

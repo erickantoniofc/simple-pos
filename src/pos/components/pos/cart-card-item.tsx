@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { SaleItem } from "@/mocks/types/sale-item";
 import { Minus, Plus, X } from "lucide-react";
-import { useDispatch } from "react-redux";
 
 export const CartCardItem = ({
     item, 
@@ -18,7 +17,6 @@ export const CartCardItem = ({
     onInputChange: Function,
     onRemoveItem: Function
     }) => {
-  const dispatch = useDispatch();
   return (
     <div key={item.product._id} className="flex items-center gap-2 border-b pb-2">
                 <img src={item.product.imageUrl} alt={item.product.name} className="w-10 h-10 rounded object-cover" />

@@ -1,0 +1,16 @@
+export const departamentos = [
+  { label: "Ahuachapán", value: "01" },
+  { label: "Santa Ana", value: "02" },
+  { label: "Sonsonate", value: "03" },
+  { label: "Chalatenango", value: "04" },
+  { label: "La Libertad", value: "05" },
+  { label: "San Salvador", value: "06" },
+  { label: "Cuscatlán", value: "07" },
+  { label: "La Paz", value: "08" },
+  { label: "Cabañas", value: "09" },
+  { label: "San Vicente", value: "10" },
+  { label: "Usulután", value: "11" },
+  { label: "San Miguel", value: "12" },
+  { label: "Morazán", value: "13" },
+  { label: "La Unión", value: "14" },
+];

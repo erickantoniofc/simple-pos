@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductGrid } from "./product-grid";
-import { CustomerSelectComponent } from "./customer-select-component";
+import { CustomerSelectComponent } from "../customers/customer-select-component";
 import { DocumentSelectComponent } from "./document-select-component";
 import { SearchProductComponent } from "./search-product-component";
 import { useState } from "react";

@@ -71,7 +71,7 @@ export const useCartSaleLogic = (sale: Sale | null) => {
     }
   }, [dispatch]);
 
-  // Return relevant values and handlers for use in cart components
+  // Return values and handlers for use in cart components
   return {
     saleItems,
     documentType,

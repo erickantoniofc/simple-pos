@@ -53,12 +53,13 @@ export const CustomerDialog = () => {
 
           {/* Footer */}
           <div className="border-t px-6 py-4 flex justify-center gap-2">
-            <Button form="customer-form" type="submit" className="text-foreground">
+            <Button form="customer-form" type="submit" className="text-foreground cursor-pointer">
               <Save />
               Guardar
             </Button>
             {selected && (
               <Button
+                className="cursor-pointer"
                 type="button"
                 variant={selected.active ? "destructive" : "secondary"}
                 onClick={handleToggleActive}
@@ -66,7 +67,7 @@ export const CustomerDialog = () => {
                 {selected.active ? "Deshabilitar" : "Habilitar"}
               </Button>
             )}
-            <Button variant="outline" type="button" onClick={handleClose}>
+            <Button variant="outline" type="button" onClick={handleClose} className="cursor-pointer">
               Cancelar
             </Button>
           </div>

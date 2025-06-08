@@ -19,11 +19,25 @@ export const ProductCard = ({product} : {product: Product}) => {
             total: product.price,
         }));
     }
+
+    
+  const showImage = !!product.imageUrl?.trim();
+  const initial = product.name.charAt(0).toUpperCase();
     
     return(
         <Card onClick={onProductClick} className="w-full shadow-sm hover:scale-[1.01] transition-shadow active:scale-[0.98] cursor-pointer">
             <CardContent className="flex flex-col items-center text-center">
-                <img src={product.imageUrl} alt={product.name} className="w-24 h-24 object-cover rounded-md mb-4"/>
+                {showImage ? (
+                        <img
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-24 h-24 object-cover rounded-md mb-4"
+                        />
+                        ) : (
+                        <div className="w-24 h-24 mb-4 flex items-center justify-center rounded-md bg-muted text-muted-foreground text-4xl font-semibold">
+                            {initial}
+                        </div>
+                )}                
                 <h3 title={product.name} className="font-semibold max-w-full truncate whitespace-nowrap overflow-hidden">{product.name}</h3>
                 <p className="text-primary text-base font-bold mt-2">${product.price.toFixed(2)}</p>
             </CardContent> 

@@ -38,6 +38,8 @@ export const useCustomerForm = () => {
       email: "",
       phone: "",
       address: "",
+      department: "",
+      municipality: "",
       dui: "",
       nit: "",
       nrc: "",
@@ -61,7 +63,7 @@ export const useCustomerForm = () => {
 
       form.reset({
         ...selected,
-        sendMethod: convertSendMethod(selected.sendMethod),
+        sendMethod: convertSendMethod(selected.sendMethod)
       });
     } else {
       form.reset();
@@ -90,6 +92,8 @@ export const useCustomerForm = () => {
       ...selected,
       ...data,
       sendMethod: getSendMethodValue(data.sendMethod),
+      activity: data.activity ? Number(data.activity) : undefined,
+      // Change logic when connecting to backend
       _id: selected?._id || uuidv4(),
       active: true,
     };
@@ -100,7 +104,7 @@ export const useCustomerForm = () => {
       dispatch(addCustomer(base));
     }
 
-    dispatch(setActiveCustomer(null)); // close dialog after saving
+    dispatch(setActiveCustomer(undefined)); // close dialog after saving
   };
 
   // Expose all necessary logic and helpers for use in the form component

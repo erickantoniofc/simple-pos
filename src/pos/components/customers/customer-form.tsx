@@ -45,7 +45,7 @@ export const CustomerForm = () => {
                 <FormControl>
                     <Input
                     {...field}
-                    placeholder="Nombre de l cliente"
+                    placeholder="Nombre del cliente"
                     className="w-full"
                     />
                 </FormControl>

@@ -3,11 +3,13 @@ import type { Product } from '@/data/types/product';
 import { mockProducts } from '@/data/mocks/products';
 
 interface ProductsState {
-    products: Product[]
+    products: Product[],
+    selectedProduct?: Product | null | undefined;
 }
 
 const initialState: ProductsState = {
-    products: mockProducts
+    products: mockProducts,
+    selectedProduct: undefined,
 }
 
 export const productSlice = createSlice({
@@ -30,10 +32,18 @@ export const productSlice = createSlice({
             if(product) {
                 product.active = false;
             }
-
         },
+        setActiveProduct: (state, action: PayloadAction<Product | null | undefined>) => {
+            state.selectedProduct = action.payload;
+        },
+        toggleProductActive: (state, action: PayloadAction<string>) => {
+            const product = state.products.find(p => p._id === action.payload);
+            if(product) {
+                product.active = !product.active;
+            }
+        }
     }
 });
 
-export const {updateProduct, addProduct, deleteProductById} = productSlice.actions;
+export const {updateProduct, addProduct, deleteProductById, setActiveProduct, toggleProductActive} = productSlice.actions;
 export default productSlice.reducer;

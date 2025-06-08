@@ -9,6 +9,7 @@ import {
     SearchProductComponent,
     ProductGrid
  } from "@/pos/components/pos"
+import { CustomerDialog } from "../customers";
 export const ProductContainer = () => {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -21,6 +22,7 @@ export const ProductContainer = () => {
                 <div className="grid grid-cols-4 gap-2">
                     <div className="col-span-3 grid grid-cols-5 gap-2">
                     <CustomerSelectComponent />
+                     <CustomerDialog />
                     </div>
                     <div className="col-span-1">
                     <DocumentSelectComponent />

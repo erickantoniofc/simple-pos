@@ -49,7 +49,10 @@ export const SearchProductComponent = (
 
         <div className="flex gap-2 w-max pb-1">
             {
-                categories.map((category) => {
+                categories
+                .filter(c => c.active)
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((category) => {
                     const isActive = selectedCategories.includes(category);
                     return (
                     <Button 

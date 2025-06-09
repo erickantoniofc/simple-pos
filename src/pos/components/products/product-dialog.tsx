@@ -1,26 +1,15 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveProduct, toggleProductActive } from "@/store/pos/product-slice";
+import { useSelector } from "react-redux";
 
 import type { RootState } from "@/store/store";
 
 import { ProductForm } from "@/pos/components/products/product-form";
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ScrollArea } from "@/components";
 import { Save } from "lucide-react";
+import { useProductForm } from "@/hooks/use-product-form";
 
 export const ProductDialog = () => {
     const selected = useSelector((state: RootState) => state.products.selectedProduct);
-    const dispatch = useDispatch();
-
-    const open = selected !== undefined;
-
-    const handleClose = () => dispatch(setActiveProduct(undefined));
-
-    const handleToggleActive = () => {
-        if(selected?._id) {
-            dispatch(toggleProductActive(selected._id));
-        }
-        handleClose();
-    }
+    const {handleClose, handleToggleActive, open} = useProductForm();
 
     return (
     <Dialog open={open} onOpenChange={(open)=> !open && handleClose()}>

@@ -6,6 +6,7 @@ import { SimplePosApp } from '@/simple-pos'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import { store } from './store/store'
+import { Toaster } from 'sonner'
 
 
 createRoot(document.getElementById('root')!).render(
@@ -13,6 +14,8 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
     <BrowserRouter>
       <SimplePosApp />
+      <Toaster position="bottom-right"/>
+
     </BrowserRouter>
 
     </Provider>

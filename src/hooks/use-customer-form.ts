@@ -7,11 +7,16 @@ import { v4 as uuidv4 } from "uuid";
 import { customerSchema } from "@/data/schemas/customer-schema";
 import type { z } from "zod";
 import { type RootState } from "@/store/store";
+
+
 import {
   addCustomer,
   updateCustomer,
   setActiveCustomer,
+  toggleCustomerActive,
 } from "@/store/pos/customer-slice";
+import { toast } from "sonner";
+
 
 import { formatDui, formatNit, formatNrc } from "@/helpers";
 
@@ -70,6 +75,27 @@ export const useCustomerForm = () => {
     }
   }, [selected]);
 
+    const open = selected !== undefined;
+
+    const handleClose = () => dispatch(setActiveCustomer(undefined));
+
+    const handleToggleActive = () => {
+      try {
+        if (selected?._id) {
+          dispatch(toggleCustomerActive(selected._id));
+          const message = selected.active ? "deshabilitado" : "habilitado";
+          toast.success(`El cliente ha sido ${message} exitosamente`); 
+        }
+        handleClose();
+        
+      } catch (error) {
+        const message = selected?.active ? "deshabilitar" : "habilitar";
+        toast.error(`Error al ${message} el cliente`);
+        console.log(error);
+      }
+    };
+
+
   /**
    * Convert selected sendMethod values from string[] to numeric code.
    */
@@ -88,23 +114,32 @@ export const useCustomerForm = () => {
    * Submit handler that dispatches create or update actions based on selection.
    */
   const onSubmit = (data: CustomerFormValues) => {
-    const base = {
-      ...selected,
-      ...data,
-      sendMethod: getSendMethodValue(data.sendMethod),
-      activity: data.activity ? Number(data.activity) : undefined,
-      // Change logic when connecting to backend
-      _id: selected?._id || uuidv4(),
-      active: true,
-    };
+    try {
+      const base = {
+        ...selected,
+        ...data,
+        sendMethod: getSendMethodValue(data.sendMethod),
+        activity: data.activity ? Number(data.activity) : undefined,
+        // Change logic when connecting to backend
+        _id: selected?._id || uuidv4(),
+        active: true,
+      };
+  
+      if (selected) {
+        dispatch(updateCustomer(base));
+        toast.success("Cliente actualizado exitosamente");
+      } else {
+        dispatch(addCustomer(base));
+        toast.success("Cliente creado exitosamente");
 
-    if (selected) {
-      dispatch(updateCustomer(base));
-    } else {
-      dispatch(addCustomer(base));
+      }
+  
+      dispatch(setActiveCustomer(undefined)); // close dialog after saving
+      
+    } catch (error) {
+      
+      toast.error("Hubo un error al guardar el cliente");
     }
-
-    dispatch(setActiveCustomer(undefined)); // close dialog after saving
   };
 
   // Expose all necessary logic and helpers for use in the form component
@@ -115,5 +150,8 @@ export const useCustomerForm = () => {
     formatDui,
     formatNit,
     formatNrc,
+    open,
+    handleToggleActive,
+    handleClose
   };
 };

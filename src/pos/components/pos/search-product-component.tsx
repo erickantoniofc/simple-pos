@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import type { RootState } from "@/store/store";
 import type { Category } from "@/data/types/category";
@@ -10,6 +10,7 @@ import {
     ScrollBar, 
 } from "@/components/";
 import { Plus } from "lucide-react";
+import { setActiveProduct } from "@/store/pos/product-slice";
 
 
 
@@ -18,6 +19,7 @@ export const SearchProductComponent = (
     : 
     {selectedCategories: Category[]; setSelectedCategories: (cats: Category[]) => void; searchText: string; setSearchText: (text: string) => void;}
     ) => {
+    const dispatch = useDispatch();
     const categories = useSelector((state: RootState) => state.categories.categories);
     
     const toggleCategory = (category: Category) => {
@@ -43,7 +45,12 @@ export const SearchProductComponent = (
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
             />
-            <Button className="whitespace-nowrap h-12 text-white cursor-pointer"><Plus/> Agregar producto</Button>
+            <Button 
+                className="whitespace-nowrap h-12 text-white cursor-pointer"
+                onClick={() => dispatch(setActiveProduct(null)) }
+                >
+                <Plus/> Agregar producto
+            </Button>
         </div>
         <ScrollArea className="w-full whitespace-nowrap overflow-auto" onWheel={categoriesOnWheelHandler}>
 

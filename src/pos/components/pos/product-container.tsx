@@ -10,6 +10,7 @@ import {
     ProductGrid
  } from "@/pos/components/pos"
 import { CustomerDialog } from "../customers";
+import { ProductDialog } from "../products/product-dialog";
 export const ProductContainer = () => {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [searchText, setSearchText] = useState("");
@@ -37,6 +38,7 @@ export const ProductContainer = () => {
                         searchText={searchText}
                         setSearchText={setSearchText} 
                     />
+                    <ProductDialog />
                 </div>
 
                 {/* Scrollable Product Grid */}

@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "@/store/store";
-import { setActiveCustomer, toggleCustomerActive } from "@/store/pos/customer-slice";
 
 import {
   Dialog,
@@ -13,21 +12,13 @@ import {
 } from "@/components";
 import { Save } from "lucide-react";
 import { CustomerForm } from "@/pos/components/customers/customer-form";
+import { useCustomerForm } from "@/hooks/use-customer-form";
 
 export const CustomerDialog = () => {
   const selected = useSelector((state: RootState) => state.customers.selectedCustomer);
-  const dispatch = useDispatch();
+  const {open, handleToggleActive, handleClose} = useCustomerForm();
 
-  const open = selected !== undefined;
 
-  const handleClose = () => dispatch(setActiveCustomer(undefined));
-
-  const handleToggleActive = () => {
-    if (selected?._id) {
-      dispatch(toggleCustomerActive(selected._id));
-    }
-    handleClose();
-  };
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>

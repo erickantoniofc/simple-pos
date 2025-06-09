@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { addProduct, setActiveProduct, updateProduct } from "@/store/pos/product-slice";
+import { addProduct, setActiveProduct, toggleProductActive, updateProduct } from "@/store/pos/product-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
 
 import { productSchema } from "@/data/schemas/product-schema";
 import type { RootState } from "@/store/store";
 import type { z } from "zod";
+import { toast } from "sonner";
 
 export type ProductFormInput = z.input<typeof productSchema>;
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -55,11 +56,34 @@ export const useProductForm = () => {
             setImageFile(null);
           }
         }, [selected]);
+
+
+        const open = selected !== undefined;
+
+        const handleClose = () => dispatch(setActiveProduct(undefined));
+
+        const handleToggleActive = () => {
+          try {
+            if(selected?._id) {
+              dispatch(toggleProductActive(selected._id));
+              const message = selected.active ? "deshabilitado" : "habilitado";
+              toast.success(`El produto ha sido ${message} exitosamente`); 
+            }
+            
+            handleClose();
+            
+          } catch (error) {
+            const message = selected?.active ? "deshabilitar" : "habilitar"
+            toast.error(`Error al ${message} el producto`);
+          }
+       
+        }
       
          /**
          * Submit handler that dispatches create or update actions based on selection.
          */
         const onSubmit = (data: ProductFormValues) => {
+          try {
             const base = {
             ...selected,
             ...data,
@@ -71,15 +95,24 @@ export const useProductForm = () => {
             };
 
             if (selected) {
-            dispatch(updateProduct(base));
+              dispatch(updateProduct(base));
+              toast.success("Producto modificado exitosamente");
+
             } else {
-            console.log(base)
-            dispatch(addProduct(base));
+              dispatch(addProduct(base));
+              toast.success("Producto creado exitosamente");
+
             }
 
             dispatch(setActiveProduct(undefined)); // close dialog after saving
+          } catch (error) {
+             
+
+            toast.error("Hubo un error al guardar el producto");
+          }
+            
         };
 
-    return {form, selected, onSubmit, imageFile, previewUrl, onFileSelect}
+    return {form, selected, onSubmit, imageFile, previewUrl, onFileSelect, handleToggleActive, handleClose, open}
     
 }

@@ -9,6 +9,7 @@ export const PosLayout = () => {
         <SidebarTrigger />
         <Outlet />
       </main>
+
     </SidebarProvider>
   )
 }

@@ -2,10 +2,9 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import { cn } from "@/lib/utils"
-import { setActiveProduct } from "@/store/pos/product-slice"
+import { setActiveCustomer } from "@/store/pos/customer-slice"
 
-import type { Product } from "@/data/types/product"
-import { productColumns } from "@/pos/components/products/product-columns"
+import type { Customer } from "@/data/types/customer"
 
 import { 
   DataTable,
@@ -15,18 +14,19 @@ import {
   ScrollArea,
   Button,
 } from "@/components"
+import { customerColumns } from "@/pos-app/components/customers/customers-columns"
 import { Plus } from "lucide-react"
-import { useProductActions } from "@/hooks/use-product-actions"
+import { useCustomerActions } from "@/hooks/use-customer-actions"
 
-export const ProductsTableComponent = ({products} : {products: Product[]}) => {
+export const CustomersTableComponent = ({customers} : {customers: Customer[]}) => {
 
   const {
     filter,
     setFilter,
-    handleNewProduct,
+    handleNewCustomer,
     handleRowClick,
     selected
-  } = useProductActions();
+  } = useCustomerActions();
 
   return (
      <Card className="flex flex-row h-full">
@@ -34,27 +34,26 @@ export const ProductsTableComponent = ({products} : {products: Product[]}) => {
        <div className="flex items-center justify-between gap-4">
           <Input
             type="text"
-            placeholder="Buscar por nombre de producto"
+            placeholder="Buscar por nombre"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="max-w-sm"
           />
           <div className="ml-auto">
-
-            <Button className="text-foreground cursor-pointer" onClick={handleNewProduct}><Plus /> Nuevo producto</Button>
+            <Button className="text-foreground cursor-pointer" onClick={handleNewCustomer}><Plus /> Nuevo Cliente</Button>
           </div>
         </div>
 
       <ScrollArea className="flex-1 overflow-y-auto">
         <DataTable 
-          columns={productColumns} 
-          data={products} 
+          columns={customerColumns} 
+          data={customers} 
           filter={filter}  
           onRowClick={handleRowClick} 
-          rowClassName={(product) =>
+          rowClassName={(customer) =>
           cn(
-            !product.active && "opacity-50 bg-muted",
-            selected?._id === product._id && "bg-primary/10 border-l-4 border-primary"
+            !customer.active && "opacity-50 bg-muted",
+            selected?._id === customer._id && "bg-primary/10 border-l-4 border-primary"
           )}
         />
       </ScrollArea>

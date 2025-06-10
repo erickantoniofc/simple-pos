@@ -22,12 +22,12 @@ import { type Sale, DocumentType, DocumentStatus } from "@/data/types/sale";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Printer, Send } from "lucide-react";
+import { printTicketHtml } from "@/helpers/print-ticket-html";
 
 interface SaleSummaryDialogProps {
   open: boolean;
   onClose: () => void;
   sale: Sale | null;
-  onPrint?: () => void;
   onResend?: () => void;
   onNewSale?: () => void;
   onGoToSales?: () => void;
@@ -39,7 +39,6 @@ export const SaleSummaryDialog = ({
   open,
   onClose,
   sale,
-  onPrint,
   onResend,
   onNewSale,
   onGoToSales,
@@ -57,6 +56,11 @@ export const SaleSummaryDialog = ({
 
   const [confirmOpen, setConfirmOpen] = useState(false);
 
+  const onPrint = () => {
+      if (sale) {
+        printTicketHtml(sale);
+      }
+  }
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col h-full">

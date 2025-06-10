@@ -16,7 +16,7 @@ export const BranchSwitcher = () => {
                 <DropdownMenuTrigger asChild>
                     <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                            <House className="size-4" />
+                            <House className="size-4 text-foreground" />
                         </div>
                          <div className="flex flex-col gap-0.5 leading-none">
                             <span className="font-semibold">Sucursal</span>

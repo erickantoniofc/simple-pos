@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import type { RootState } from "@/store/store";
 
-import { ProductForm } from "@/pos/components/products/product-form";
+import { ProductForm } from "@/pos-app/components/products/product-form";
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ScrollArea } from "@/components";
 import { Save } from "lucide-react";
 import { useProductForm } from "@/hooks/use-product-form";

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useRef } from "react"
+import { useKeyboardNavigation } from "@/hooks/use-keyboard-navigation"
 
 import type { Category } from "@/data/types/category";
 
@@ -8,7 +10,7 @@ import {
     DocumentSelectComponent,
     SearchProductComponent,
     ProductGrid
- } from "@/pos/components/pos"
+ } from "@/pos-app/components/pos"
 import { CustomerDialog } from "../customers";
 import { ProductDialog } from "../products/product-dialog";
 import { CategoriesFilterComponent } from "./categories-filter-component";
@@ -21,7 +23,8 @@ export const PosContainer = () => {
     const [searchText, setSearchText] = useState("");
     const transactionTerm = useSelector((state: RootState) => state.sales.activeSale?.transactionTerm);
     const isOnCreditSale = (transactionTerm === "2");
-      
+    
+
     return(
         <Card className="flex flex-row h-full">
             <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full w-full">

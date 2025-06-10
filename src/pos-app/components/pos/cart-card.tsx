@@ -5,7 +5,7 @@ import { DocumentStatus, type Sale } from "@/data/types/sale"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button, ScrollArea } from "@/components"
 import { Trash2} from "lucide-react"
-import { CartCardItem, CartCardFooter } from "@/pos/components/pos"
+import { CartCardItem, CartCardFooter } from "@/pos-app/components/pos"
 
 
 export const CartCard = ({

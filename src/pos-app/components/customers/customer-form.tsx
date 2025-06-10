@@ -22,7 +22,7 @@ import {
   DropdownMenuContent, 
   DropdownMenuTrigger
 } from "@/components";
-import { CustomerActivityCombobox } from "@/pos/components/customers/customer-activity-combobox";
+import { CustomerActivityCombobox } from "@/pos-app/components/customers/customer-activity-combobox";
 
 
 

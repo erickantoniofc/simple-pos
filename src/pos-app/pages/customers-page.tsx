@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { Customer } from "@/data/types/customer";
 
-import { CustomersTableComponent, CustomerDialog } from "@/pos/components/customers"
+import { CustomersTableComponent, CustomerDialog } from "@/pos-app/components/customers"
 
 
 export const CustomersPage = () => {

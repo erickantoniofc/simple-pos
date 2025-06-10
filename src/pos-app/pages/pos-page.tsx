@@ -4,7 +4,7 @@ import { setActiveSale } from "@/store/pos/sale-slice";
 
 import type { RootState } from "@/store/store";
 
-import { CartCard, PosContainer } from "@/pos/components/pos";
+import { CartCard, PosContainer } from "@/pos-app/components/pos";
 import { DocumentStatus } from "@/data/types/sale";
 
 

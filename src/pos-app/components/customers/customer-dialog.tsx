@@ -11,7 +11,7 @@ import {
   ScrollArea
 } from "@/components";
 import { Save } from "lucide-react";
-import { CustomerForm } from "@/pos/components/customers/customer-form";
+import { CustomerForm } from "@/pos-app/components/customers/customer-form";
 import { useCustomerForm } from "@/hooks/use-customer-form";
 
 export const CustomerDialog = () => {

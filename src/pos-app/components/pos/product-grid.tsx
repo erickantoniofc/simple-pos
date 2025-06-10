@@ -4,7 +4,7 @@ import type { RootState } from "@/store/store";
 import type { Product } from "@/data/types/product";
 import type { Category } from "@/data/types/category";
 
-import { ProductCard } from "@/pos/components/pos";
+import { ProductCard } from "@/pos-app/components/pos";
 import { ScrollArea } from "@/components";
 
 export const ProductGrid = (

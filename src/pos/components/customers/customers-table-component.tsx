@@ -16,23 +16,18 @@ import {
 } from "@/components"
 import { customerColumns } from "@/pos/components/customers/customers-columns"
 import { Plus } from "lucide-react"
+import { useCustomerActions } from "@/hooks/use-customer-actions"
 
 export const CustomersTableComponent = ({customers} : {customers: Customer[]}) => {
-  const [filter, setFilter] = useState(""); 
-  const dispatch = useDispatch();
-  const selected = useSelector((state: RootState) => state.customers.selectedCustomer);
 
-  useEffect(() => {
-    dispatch(setActiveCustomer(undefined));
-  }, []);
-  
-  const handleRowClick = (customer: Customer) => {
-    dispatch(setActiveCustomer(customer));
-  }
+  const {
+    filter,
+    setFilter,
+    handleNewCustomer,
+    handleRowClick,
+    selected
+  } = useCustomerActions();
 
-  const handleNewCustomer = () => {
-    dispatch(setActiveCustomer(null));
-  };
   return (
      <Card className="flex flex-row h-full">
       <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full w-full">

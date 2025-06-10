@@ -16,24 +16,17 @@ import {
   Button,
 } from "@/components"
 import { Plus } from "lucide-react"
+import { useProductActions } from "@/hooks/use-product-actions"
 
 export const ProductsTableComponent = ({products} : {products: Product[]}) => {
-  const [filter, setFilter] = useState(""); 
-  const dispatch = useDispatch();
-  const selected = useSelector((state: RootState) => state.products.selectedProduct);
 
-  useEffect(() => {
-    dispatch(setActiveProduct(undefined));
-  }, []);
-  
-  const handleRowClick = (product: Product) => {
-    console.log(product)
-    dispatch(setActiveProduct(product));
-  }
-
-  const handleNewProduct = () => {
-    dispatch(setActiveProduct(null));
-  };
+  const {
+    filter,
+    setFilter,
+    handleNewProduct,
+    handleRowClick,
+    selected
+  } = useProductActions();
 
   return (
      <Card className="flex flex-row h-full">

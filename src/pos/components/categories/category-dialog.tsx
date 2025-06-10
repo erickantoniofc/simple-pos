@@ -1,5 +1,3 @@
-
-import { ProductForm } from "@/pos/components/products/product-form";
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ScrollArea } from "@/components";
 import { Save } from "lucide-react";
 import type { Category } from "@/data/types/category";

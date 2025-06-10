@@ -24,6 +24,7 @@ export const DocumentSelectComponent = () => {
   }
 
   return (
+    
     <Select 
     value={ 
         documentType === 1 ? "1" :

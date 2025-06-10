@@ -1,6 +1,6 @@
 import { useCartSaleLogic } from "@/hooks/use-cart-sale-logic";
 
-import { type Sale } from "@/data/types/sale"
+import { DocumentStatus, type Sale } from "@/data/types/sale"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Button, ScrollArea } from "@/components"
@@ -31,11 +31,16 @@ export const CartCard = ({
 
         {/* Header */}
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-semibold">Nueva venta</h2>
-          <Button onClick={clearCart} variant="ghost" className="text-destructive cursor-pointer">
-            <Trash2 className="w-4 h-4 mr-1" />
-            Limpiar
-          </Button>
+          <h2 className="text-lg font-semibold">{sale?._id ? "Editar venta" : "Nueva venta"}</h2>
+          {sale?._id && (
+            <p className="text-xs text-muted-foreground">ID: {sale._id}</p>
+          )}
+          {(sale?.status === DocumentStatus.INIT || sale?.status === DocumentStatus.SAVE) && (
+            <Button onClick={clearCart} variant="ghost" className="text-destructive cursor-pointer">
+              <Trash2 className="w-4 h-4 mr-1" />
+              Limpiar
+            </Button>
+          )}
         </div>
 
   
@@ -56,8 +61,9 @@ export const CartCard = ({
           </div>
         </ScrollArea>
 
+       
         {/* Footer */}
-        <CartCardFooter documentType={documentType} subtotal={subtotal} tax={tax} total={total} />
+        <CartCardFooter documentType={documentType} subtotal={subtotal} tax={tax} total={total} status={sale?.status}/>
         
       </CardContent>
     </Card>

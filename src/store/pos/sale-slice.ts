@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { Sale } from '@/data/types/sale';
-import { mockSales } from '@/data/mocks/sales';
+import { DocumentStatus, type Sale } from '@/data/types/sale';
 import type { SaleItem } from '@/data/types/sale-item';
 
 interface SalesState {
@@ -9,7 +8,7 @@ interface SalesState {
 }
 
 const initialState: SalesState = {
-    sales: mockSales,
+    sales: [],
     activeSale: null,
 }
 
@@ -33,9 +32,12 @@ export const saleSlice = createSlice({
                saleItems: [],
                customer: undefined,
                documentType: 1,
-               state: 1,
+               status: DocumentStatus.INIT,
                documentNumber: '',
-               total: 0
+               total: 0,
+               paymentMethod: "01",
+               transactionTerm: "1",
+               paymentTerm: [0,  "01"]
             };
         },
         updateActiveSale: (state, action: PayloadAction<Partial<Sale>>) => {
@@ -88,7 +90,24 @@ export const saleSlice = createSlice({
                 item.total = item.subtotal - item.discount;
             }
             state.activeSale.total = state.activeSale.saleItems.reduce((acc, item) => acc + item.total, 0);
+        },
+        removeSale: (state, action: PayloadAction<string>) => {
+            state.sales = state.sales.filter(sale => sale._id !== action.payload);
+        },
+        clearSaleItems: (state) => {
+        if (state.activeSale) {
+            state.activeSale.saleItems = [];
+            state.activeSale.total = 0;
         }
+        },
+        cancelSaleById: (state, action: PayloadAction<string>) => {
+        const saleId = action.payload;
+        const sale = state.sales.find((s) => s._id === saleId);
+        if (sale) {
+            sale.status = DocumentStatus.CANCELLED;
+            sale.cancelledDate = Date.now().toString(); // o new Date().getTime()
+        }
+},
         
     }
 });
@@ -103,5 +122,8 @@ export const {
     resetActiveSale,
     updateItemQuantity,
     updateItemPrice,
+    removeSale,
+    clearSaleItems,
+    cancelSaleById
 } = saleSlice.actions;
 export default saleSlice.reducer;

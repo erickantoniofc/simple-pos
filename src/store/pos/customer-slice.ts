@@ -5,11 +5,15 @@ import {mockCustomers } from '@/data/mocks/customers';
 interface CustomerState {
     customers: Customer[],
     selectedCustomer:  Customer | null | undefined;
+    selectCreatedCustomerInSale: boolean;
+
 }
 
 const initialState: CustomerState = {
     customers: mockCustomers,
     selectedCustomer: undefined,
+    selectCreatedCustomerInSale: false
+
 }
 
 export const customerSlice = createSlice({
@@ -41,9 +45,12 @@ export const customerSlice = createSlice({
         if (customer) {
             customer.active = !customer.active;
         }
+        },
+        setSelectCreatedCustomerInSale: (state, action: PayloadAction<boolean>) => {
+            state.selectCreatedCustomerInSale = action.payload;
         }
     }
 });
 
-export const {setActiveCustomer, addCustomer, updateCustomer, deleteCustomerById, toggleCustomerActive} = customerSlice.actions;
+export const {setActiveCustomer, addCustomer, updateCustomer, deleteCustomerById, toggleCustomerActive, setSelectCreatedCustomerInSale} = customerSlice.actions;
 export default customerSlice.reducer;

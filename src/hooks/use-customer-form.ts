@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { customerSchema } from "@/data/schemas/customer-schema";
 import type { z } from "zod";
-import { type RootState } from "@/store/store";
+import { store, type RootState } from "@/store/store";
 
 
 import {
@@ -14,11 +14,13 @@ import {
   updateCustomer,
   setActiveCustomer,
   toggleCustomerActive,
+  setSelectCreatedCustomerInSale,
 } from "@/store/pos/customer-slice";
 import { toast } from "sonner";
 
 
 import { formatDui, formatNit, formatNrc } from "@/helpers";
+import { updateActiveSale } from "@/store/pos/sale-slice";
 
 export type CustomerFormValues = z.infer<typeof customerSchema>;
 
@@ -34,6 +36,10 @@ export const useCustomerForm = () => {
   const selected = useSelector(
     (state: RootState) => state.customers.selectedCustomer
   );
+
+  const selectCreatedInSale = useSelector(
+  (state: RootState) => state.customers.selectCreatedCustomerInSale
+);
 
   // Initialize react-hook-form with schema-based validation and default values
   const form = useForm<CustomerFormValues>({
@@ -127,13 +133,19 @@ export const useCustomerForm = () => {
   
       if (selected) {
         dispatch(updateCustomer(base));
+        const activeCustomerId = (store.getState() as RootState).sales.activeSale?.customer?._id;
+        if (activeCustomerId === base._id) {
+          dispatch(updateActiveSale({ customer: base }));
+        }
         toast.success("Cliente actualizado exitosamente");
       } else {
         dispatch(addCustomer(base));
+        selectCreatedInSale && dispatch(updateActiveSale({ customer: base }));
         toast.success("Cliente creado exitosamente");
 
       }
-  
+
+      dispatch(setSelectCreatedCustomerInSale(false));
       dispatch(setActiveCustomer(undefined)); // close dialog after saving
       
     } catch (error) {

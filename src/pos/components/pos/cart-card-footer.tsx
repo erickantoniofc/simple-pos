@@ -1,19 +1,21 @@
-import { DocumentType } from "@/data/types/sale";
-import { Button } from "@/components/ui/button"
-import { Plus, Save, Send } from "lucide-react"
+import { DocumentStatus, DocumentType } from "@/data/types/sale";
+import { ActionButtonsComponent } from "./action-buttons-component";
 
 export const CartCardFooter = (
   {
     documentType, 
     subtotal, 
     tax, 
-    total
+    total,
+    status
   } : {
     documentType: number; // DocumentType.FE or DocumentType.CCF
     subtotal: number,
     tax: number,
     total: number,
+    status: number | undefined,
   }) => {
+
   return (
     <div className="space-y-1 text-sm text-right mt-auto">
           <div className="flex justify-between ">
@@ -28,18 +30,7 @@ export const CartCardFooter = (
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
-          <div className="grid grid-cols-5 gap-2 w-full">
-            <Button className="col-span-1 h-10 text-accent-foreground cursor-pointer">
-              <Save className="h-4 w-4"/>
-            </Button>
-            <Button className="col-span-1 h-10 text-accent-foreground cursor-pointer">
-              <Plus className="h-4 w-4"/>
-            </Button>
-            <Button className="col-span-3 h-10 text-accent-foreground cursor-pointer">
-              <Send className="h-4 w-4"/>
-              <p>Enviar DTE</p>
-            </Button>
-          </div>
+          <ActionButtonsComponent status={status ?? DocumentStatus.INIT} />
         </div>
   )
 }

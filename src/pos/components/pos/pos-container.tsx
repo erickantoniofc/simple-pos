@@ -11,41 +11,55 @@ import {
  } from "@/pos/components/pos"
 import { CustomerDialog } from "../customers";
 import { ProductDialog } from "../products/product-dialog";
-export const ProductContainer = () => {
+import { CategoriesFilterComponent } from "./categories-filter-component";
+import { TransactionTermComponent } from "./trasaction-term-component";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { PaymentTermComponent } from "./payment-term-component";
+export const PosContainer = () => {
     const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [searchText, setSearchText] = useState("");
-
+    const transactionTerm = useSelector((state: RootState) => state.sales.activeSale?.transactionTerm);
+    const isOnCreditSale = (transactionTerm === "2");
       
     return(
         <Card className="flex flex-row h-full">
             <CardContent className="flex flex-col flex-1 p-4 space-y-4 h-full w-full">
                 
-                <div className="grid grid-cols-4 gap-2">
-                    <div className="col-span-3 grid grid-cols-5 gap-2">
+                <div className={`grid grid-cols-5 gap-2`}>
+                    <div className="col-span-3">
                     <CustomerSelectComponent />
                      <CustomerDialog />
                     </div>
-                    <div className="col-span-1">
                     <DocumentSelectComponent />
-                    </div>
+                    <TransactionTermComponent />
+
                 </div>
                 
-                {/* Add Product UI */}
-                <div className="w-full">
-                    <SearchProductComponent 
-                        selectedCategories={selectedCategories}
-                        setSelectedCategories={setSelectedCategories}
+                <div className="grid grid-cols-5 gap-2">
+                   <div className={isOnCreditSale ? "col-span-4" : "col-span-5"}>
+                    <SearchProductComponent         
                         searchText={searchText}
                         setSearchText={setSearchText} 
                     />
-                    <ProductDialog />
-                </div>
+                   </div>
 
+                   {
+                    isOnCreditSale && <PaymentTermComponent />
+                   }
+
+                </div>
+                
+                <ProductDialog />
+                 <CategoriesFilterComponent 
+                            selectedCategories={selectedCategories}
+                            setSelectedCategories={setSelectedCategories}
+                        />
+                        
                 {/* Scrollable Product Grid */}
                 <div className="flex-1 overflow-y-auto">
                     <ProductGrid selectedCategories={selectedCategories} searchText={searchText}/>
                 </div>
-
             </CardContent>
         </Card>
     )

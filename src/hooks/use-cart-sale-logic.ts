@@ -3,8 +3,8 @@ import { useCallback } from "react";
 import {
   updateItemQuantity,
   removeItemFromActiveSale,
-  resetActiveSale,
   updateItemPrice,
+  clearSaleItems,
 } from "@/store/pos/sale-slice";
 import type { Sale } from "@/data/types/sale";
 import { DocumentType } from "@/data/types/sale";
@@ -55,7 +55,7 @@ export const useCartSaleLogic = (sale: Sale | null) => {
    * Clears the entire cart (resets active sale).
    */
   const clearCart = useCallback(() => {
-    dispatch(resetActiveSale());
+    dispatch(clearSaleItems());
   }, [dispatch]);
 
   /**

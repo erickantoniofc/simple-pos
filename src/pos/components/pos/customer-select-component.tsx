@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import type { RootState } from "@/store/store";
 import type { Customer } from "@/data/types/customer";
 import { updateActiveSale } from "@/store/pos/sale-slice";
-import { setActiveCustomer } from "@/store/pos/customer-slice";
+import { setActiveCustomer, setSelectCreatedCustomerInSale } from "@/store/pos/customer-slice";
 
 import {
   Command,
@@ -40,11 +40,12 @@ export const CustomerSelectComponent = () => {
   };
 
   const handleAddCustomer = () => {
+    dispatch(setSelectCreatedCustomerInSale(true));
     dispatch(setActiveCustomer(null)); // modo nuevo
   };
 
   return (
-    <>
+    <div className="grid grid-cols-6 gap-2">
       <div className="col-span-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
@@ -68,19 +69,30 @@ export const CustomerSelectComponent = () => {
                     .filter((c) => c.active)
                     .sort((a, b) => a.name.localeCompare(b.name))
                     .map((customer) => (
-                      <CommandItem
-                        key={customer._id}
-                        value={customer._id}
-                        onSelect={() => onCustomerSelect(customer)}
-                      >
-                        {customer.name}
-                        <Check
-                          className={cn(
-                            "ml-auto",
-                            activeCustomer?._id === customer._id ? "opacity-100" : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
+                      
+                        <CommandItem
+                          value={`${customer.name} ${customer._id} ${customer.nrc ?? ""} ${customer.dui ?? ""}`.toLowerCase()}
+                          onSelect={() => onCustomerSelect(customer)}
+                          className="py-2"
+                        >
+                          <div className="flex flex-col w-full">
+                            <div className="text-sm font-medium text-foreground truncate">
+                              {customer.name}
+                            </div>
+                            <div className="flex justify-between text-muted-foreground text-xs mt-1">
+                              <span>{`NRC: ${customer.nrc || "-"}`}</span>
+                              <span>{`DUI: ${customer.dui || "-"}`}</span>
+                            </div>
+                          </div>
+
+                          <Check
+                            className={cn(
+                              "ml-auto",
+                              activeCustomer?._id === customer._id ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+
                     ))}
                 </CommandGroup>
               </CommandList>
@@ -89,7 +101,7 @@ export const CustomerSelectComponent = () => {
         </Popover>
       </div>
 
-      <div className="col-span-1 grid grid-cols-2 gap-1">
+      <div className="col-span-2 grid grid-cols-2 gap-1">
         <Button
           className="text-accent-foreground cursor-pointer"
           disabled={!activeCustomer}
@@ -101,6 +113,6 @@ export const CustomerSelectComponent = () => {
           <Plus />
         </Button>
       </div>
-    </>
+    </div>
   );
 };

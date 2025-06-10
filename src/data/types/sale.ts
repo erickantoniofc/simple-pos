@@ -6,7 +6,8 @@ export const DocumentType = {
     CCF: 2
 }
 
-export const DocumentState = {
+export const DocumentStatus = {
+    INIT: 0,
     SAVE: 1,
     SEND: 2,
     CANCELLED: 3,
@@ -16,12 +17,16 @@ export const DocumentState = {
 export interface Sale {
     _id?: string;
     date?: string;
+    sendDate?: string;
     total: number;
     saleItems: SaleItem[];
     customer?: Customer;
     documentType: number; 
-    state: number;
+    status: number;
     documentNumber: string;
-    
+    paymentTerm: [number, string];
+    paymentMethod: string;
+    transactionTerm: string;
+    cancelledDate?: string;
 
 }

@@ -4,6 +4,7 @@ import { SalesPage } from "../pages/sales-page"
 import { ProductsPage } from "../pages/products-page"
 import { CustomersPage } from "../pages/customers-page"
 import { PosLayout } from "../layout/pos-layout"
+import { CategoriesPage } from "../pages/categories-page"
 
 export const PosRoutes = () => {
   return (
@@ -14,6 +15,8 @@ export const PosRoutes = () => {
         <Route path="productos" element={<ProductsPage />} />
         <Route path="clientes" element={<CustomersPage />} />
         <Route path="facturas" element={<SalesPage />} />
+        <Route path="categorias" element={<CategoriesPage />} />
+        <Route path="/*" element={<PosPage />}/>
         
       </Route>
       

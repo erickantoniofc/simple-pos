@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton
 } from "@/components/ui/sidebar"
-import { CircleUserRound, FileBox, FilePlus, PackageSearch, SquareMousePointer } from "lucide-react"
+import { CircleUserRound, FilePlus, List, PackageSearch, SquareMousePointer } from "lucide-react"
 import { BranchSwitcher } from "./branch-switcher"
 import { UserSwitcher } from "./user-switcher"
 import { Link } from "react-router-dom"
@@ -52,6 +52,15 @@ export const AppSidebar = () => {
                                 <Link to="productos">
                                     <PackageSearch/>
                                     <span>Productos</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        
+                        <SidebarMenuItem>
+                            <SidebarMenuButton tooltip="Categorias" asChild>
+                                <Link to="categorias">
+                                    <List/>
+                                    <span>Categorias</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

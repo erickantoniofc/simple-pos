@@ -11,7 +11,7 @@ import {
 } from "@/components"
 import { Plus } from "lucide-react"
 import { salesColumns } from "./sales-columns"
-import { SaleSummaryDialog } from "../pos/sale-summary-dialog"
+import { SaleSummaryDialog } from "./sale-summary-dialog"
 import { useSaleActions } from "@/hooks/use-sale-actions"
 
 export const SalesTableComponent = () => {

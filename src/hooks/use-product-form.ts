@@ -19,7 +19,7 @@ export const useProductForm = () => {
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-    // Get the currently selected customer from Redux state
+    // Get the currently selected product from Redux state
   const selected = useSelector((state: RootState) => state.products.selectedProduct);
 
     // Handler for file selection, sets the image file and generates a preview URL

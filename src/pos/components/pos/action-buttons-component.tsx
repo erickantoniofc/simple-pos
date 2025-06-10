@@ -14,7 +14,7 @@ import { DocumentStatus, type Sale } from "@/data/types/sale";
 import { PaymentMethodComponent } from "./payment-method-component";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { SaleSummaryDialog } from "./sale-summary-dialog";
+import { SaleSummaryDialog } from "../sales/sale-summary-dialog";
 
 export const ActionButtonsComponent = ({ status }: { status: number }) => {
   const {

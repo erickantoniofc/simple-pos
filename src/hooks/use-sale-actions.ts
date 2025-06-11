@@ -23,6 +23,7 @@ export const useSaleActions = () => {
   const dispatch = useDispatch();
   const sale = useSelector((state: RootState) => state.sales.activeSale);
   const sales = useSelector((state: RootState) => state.sales.sales);
+  const {activeBranch, activePos} = useSelector((state: RootState) => state.branches);
   const navigate = useNavigate();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [discardConfirmed, setDiscardConfirmed] = useState(false);    
@@ -71,6 +72,8 @@ export const useSaleActions = () => {
     const saleToSave = {
       ...sale,
       status: DocumentStatus.SAVE,
+      branchId: activeBranch.id,
+      posId: activePos.id,
       _id: sale._id ?? nanoid(),
     };
     const now = new Date().getTime().toString();  
@@ -100,7 +103,7 @@ export const useSaleActions = () => {
   };
 
   if (isNew) {
-    dispatch(addSale({ ...saleToSend, date: now }));
+    dispatch(addSale({ ...saleToSend, date: now, branchId: activeBranch.id, posId: activePos.id }));
   } else {
     dispatch(updateSale({ ...saleToSend, sendDate: now }));
   }

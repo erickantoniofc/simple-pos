@@ -1,12 +1,16 @@
+import { user } from '@/data/mocks/users';
+import type { User } from '@/data/types/user';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 
-interface ProductsState {
-    isAuthenticated: boolean
+interface AuthState {
+    isAuthenticated: boolean,
+    activeUser: User | null 
 }
 
-const initialState: ProductsState = {
-    isAuthenticated: false
+const initialState: AuthState = {
+    isAuthenticated: false,
+    activeUser: null
 }
 
 export const authSlice = createSlice({
@@ -15,9 +19,11 @@ export const authSlice = createSlice({
     reducers: {
         login: (state) => {
             state.isAuthenticated = true;
+            state.activeUser = user;
         },
         logout: (state) => {
             state.isAuthenticated = false;
+            state.activeUser = null;
         }
     }
 });

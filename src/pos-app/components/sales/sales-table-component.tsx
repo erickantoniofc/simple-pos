@@ -13,11 +13,13 @@ import { Plus } from "lucide-react"
 import { salesColumns } from "./sales-columns"
 import { SaleSummaryDialog } from "./sale-summary-dialog"
 import { useSaleActions } from "@/hooks/use-sale-actions"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/store/store"
 
 export const SalesTableComponent = () => {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("");
-
+  const {activePos} = useSelector((state: RootState) => state.branches);
   const {
     handleNewSaleFromSalesTable, 
     setShowSaleSummary, 
@@ -28,6 +30,8 @@ export const SalesTableComponent = () => {
     sales,
     handleCloseSaleSummary
   } = useSaleActions();
+
+  const salesToShow = sales.filter((s) => s.posId === activePos.id );
 
   return (
      <>
@@ -54,7 +58,7 @@ export const SalesTableComponent = () => {
       <ScrollArea className="flex-1 overflow-y-auto">
         <DataTable 
           columns={salesColumns} 
-          data={sales} 
+          data={salesToShow} 
           filter={filter}  
           onRowClick={handleRowClick} 
         />
@@ -72,9 +76,6 @@ export const SalesTableComponent = () => {
       onGoToSales={() => {
         setShowSaleSummary(false);
         navigate("/facturas");
-      }}
-      onPrint={() => {
-        console.log("imprimiendo");
       }}
       onResend={() => {
         console.log("reenviando");

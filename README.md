@@ -4,6 +4,9 @@ Este es un sistema de Punto de Venta (POS) desarrollado con **React + TypeScript
 
 > 🔧 Actualmente es solo el **frontend funcional**, con datos mock almacenados en el **Redux store** (sin conexión a backend).
 
+🎯 **Puedes visualizarlo aquí**:  
+👉 [https://erickantoniofc.github.io/simple-pos/](https://erickantoniofc.github.io/simple-pos/)
+
 ## 🚀 Tecnologías principales
 
 - React + Vite

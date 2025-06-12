@@ -1,89 +1,29 @@
-# 🧾 Sistema POS — React + Vite + TypeScript
+# Simple POS 🧾
 
-Este es un sistema de Punto de Venta (POS) desarrollado con React, Redux Toolkit y TypeScript. Permite la gestión de productos, clientes y facturación electrónica.
+Este es un sistema de Punto de Venta (POS) desarrollado con **React + TypeScript**, usando **Redux Toolkit** y **ShadCN/UI**.
 
----
+> 🔧 Actualmente es solo el **frontend funcional**, con datos mock almacenados en el **Redux store** (sin conexión a backend).
 
-## 🛠️ Tecnologías utilizadas
+## 🚀 Tecnologías principales
 
-- ⚛️ React 19
-- 🧠 Redux Toolkit
-- 🎨 TailwindCSS
-- 🧪 Zod + React Hook Form
-- ⚡ Vite
-- 🧾 ShadCN/UI
+- React + Vite
+- Redux Toolkit
+- TailwindCSS + ShadCN/UI
+- React Hook Form + Zod
+- Cloudinary (mock para imágenes)
+- Validación y conversión a DTE (documentos electrónicos)
 
----
+## 🧪 Funcionalidades
 
-## 🚀 Primeros pasos
+- Gestión de clientes, productos y categorías
+- Flujo de venta: guardar, enviar, anular
+- Validaciones personalizadas con toasts
+- UI moderna, responsive y accesible
 
-### 1. Clona el repositorio
-
-```bash
-git clone https://github.com/tu-usuario/tu-proyecto.git
-cd tu-proyecto
-```
-
-### 2. Instala las dependencias
+## 🛠️ Instalación
 
 ```bash
+git clone https://github.com/erickantoniofc/simple-pos.git
+cd simple-pos
 yarn install
-```
-
-### 3. Inicia el servidor de desarrollo
-
-```bash
 yarn dev
-```
-
----
-
-## 🔧 Comandos disponibles
-
-| Comando        | Descripción                          |
-|----------------|--------------------------------------|
-| `yarn dev`     | Inicia el servidor de desarrollo     |
-| `yarn build`   | Genera el build para producción      |
-| `yarn preview` | Visualiza el build de producción     |
-| `yarn lint`    | Ejecuta ESLint                       |
-
----
-
-## ✅ Funcionalidades
-
-- 🔍 Búsqueda y gestión de productos y clientes
-- 📋 Formularios con validación dinámica
-- 💾 Manejo de carrito con Redux
-- 🖥️ Interfaz adaptable (responsive) con Tailwind y ShadCN
-
----
-
-## 📁 Estructura del proyecto
-
-```
-src/
-├─ components/       # Componentes reutilizables
-├─ auth/             # Pantallas de autenticacion / registro
-├─ pos/              # Funcionalidades del sistema POS
-├─ store/            # Slices de Redux y configuración del store
-├─ mocks/            # Datos y catálogos simulados
-└─ App.tsx
-```
-
----
-
-## 🗂️ Por hacer
-
-- [x] Búsqueda y selección de productos
-- [x] CRUD de clientes
-- [ ] CRUD de productos
-- [ ] CRUD de documentos
-- [ ] Generación de factura electrónica
-- [ ] Vista imprimible
-- [ ] Implementacion de RTK y conexion con backend
-
----
-
-## 📄 Licencia
-
-MIT

@@ -6,16 +6,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
 
 import { productSchema } from "@/data/schemas/product-schema";
-import type { RootState } from "@/store/store";
+import type { AppDispatch, RootState } from "@/store/store";
 import type { z } from "zod";
 import { toast } from "sonner";
+import { saveProductThunk, toggleProductActiveThunk } from "@/store/pos/product-thunk";
 
 export type ProductFormInput = z.input<typeof productSchema>;
 export type ProductFormValues = z.infer<typeof productSchema>;
 
 export const useProductForm = () => {
   
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -62,57 +63,40 @@ export const useProductForm = () => {
 
         const handleClose = () => dispatch(setActiveProduct(undefined));
 
-        const handleToggleActive = () => {
+        const handleToggleActive = async () => {
+          if (!selected?._id) return;
+          const action = selected.active ? "deshabilitar" : "habilitar";
+          const actionPast = selected.active ? "deshabilitado" : "habilitado";
+
           try {
-            if(selected?._id) {
-              dispatch(toggleProductActive(selected._id));
-              const message = selected.active ? "deshabilitado" : "habilitado";
-              toast.success(`El produto ha sido ${message} exitosamente`); 
-            }
-            
+            await dispatch(toggleProductActiveThunk(selected._id)).unwrap();
+            toast.success(`El producto ha sido ${actionPast} exitosamente`);
             handleClose();
-            
-          } catch (error) {
-            const message = selected?.active ? "deshabilitar" : "habilitar"
-            toast.error(`Error al ${message} el producto`);
+          } catch (err) {
+            toast.error(`Error al ${action} el producto`);
           }
-       
-        }
+        };
       
          /**
          * Submit handler that dispatches create or update actions based on selection.
          */
-        const onSubmit = (data: ProductFormValues) => {
+        const onSubmit = async (data: ProductFormValues) => {
           try {
-            const base = {
-            ...selected,
-            ...data,
-            price: Number(Number(data.price).toFixed(2)),
-            active: true,
-            
-            // Change this logic when connecting to backend
-            _id: selected?._id || uuidv4(),
+            const product = {
+              ...selected,
+              ...data,
+              price: Number(Number(data.price).toFixed(2)),
+              active: true,
+              _id: selected?._id ?? uuidv4(),
             };
 
-            if (selected) {
-              dispatch(updateProduct(base));
-              toast.success("Producto modificado exitosamente");
-
-            } else {
-              dispatch(addProduct(base));
-              toast.success("Producto creado exitosamente");
-
-            }
-
-            dispatch(setActiveProduct(undefined)); // close dialog after saving
-          } catch (error) {
-             
-
+            await dispatch(saveProductThunk(product)).unwrap();
+            toast.success(selected ? "Producto modificado exitosamente" : "Producto creado exitosamente");
+            dispatch(setActiveProduct(undefined));
+          } catch (err) {
             toast.error("Hubo un error al guardar el producto");
           }
-            
         };
-
     return {form, selected, onSubmit, imageFile, previewUrl, onFileSelect, handleToggleActive, handleClose, open}
     
 }

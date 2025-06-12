@@ -19,7 +19,6 @@ export interface Sale {
     date?: string;
     sendDate?: string;
     total: number;
-    branchId: string;
     posId: string;
     saleItems: SaleItem[];
     customer?: Customer;

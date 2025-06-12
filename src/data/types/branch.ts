@@ -5,6 +5,8 @@ export interface Branch {
     address: string;
     department: string;
     municipality: string;
+    stablishmentType: string;
+    commercialName: string;
     active: true;
     posPoints: PosPoint[];
 }

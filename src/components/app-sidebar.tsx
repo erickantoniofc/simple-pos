@@ -17,6 +17,7 @@ import {
 import { CircleUserRound, FilePlus, List, PackageSearch, SquareMousePointer } from "lucide-react"
 import { UserSwitcher } from "./user-switcher"
 import { BranchStepper } from "./branch-stepper";
+import { ModeToggle } from "./mode-toggle";
 
 
 export const AppSidebar = () => {
@@ -33,9 +34,11 @@ export const AppSidebar = () => {
   return (
     <Sidebar collapsible="icon">
       
-      <SidebarHeader>
+      <SidebarHeader  className="justify-start">
+        <ModeToggle />
       </SidebarHeader>
                 <h1 className="text-center text-xl text-primary">L     O     G     O</h1>
+                
 
       <SidebarContent>
 

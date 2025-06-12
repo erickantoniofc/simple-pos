@@ -6,12 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { customerSchema } from "@/data/schemas/customer-schema";
 import type { z } from "zod";
-import { store, type RootState } from "@/store/store";
-
+import { type AppDispatch, type RootState } from "@/store/store";
 
 import {
-  addCustomer,
-  updateCustomer,
   setActiveCustomer,
   toggleCustomerActive,
   setSelectCreatedCustomerInSale,
@@ -20,7 +17,8 @@ import { toast } from "sonner";
 
 
 import { formatDui, formatNit, formatNrc } from "@/helpers";
-import { updateActiveSale } from "@/store/pos/sale-slice";
+import type { Customer } from "@/data/types/customer";
+import { saveCustomerThunk, toggleCustomerActiveThunk } from "@/store/pos/customer-thunk";
 
 export type CustomerFormValues = z.infer<typeof customerSchema>;
 
@@ -30,7 +28,7 @@ export type CustomerFormValues = z.infer<typeof customerSchema>;
  * data transformation, and submission via Redux actions.
  */
 export const useCustomerForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   // Get the currently selected customer from Redux state
   const selected = useSelector(
@@ -85,19 +83,19 @@ export const useCustomerForm = () => {
 
     const handleClose = () => dispatch(setActiveCustomer(undefined));
 
-    const handleToggleActive = () => {
+    const handleToggleActive = async() => {
+       if (!selected?._id) return;
+
+      const action = selected.active ? "deshabilitar" : "habilitar";
+      const actionPast = selected.active ? "deshabilitado" : "habilitado";
+
       try {
-        if (selected?._id) {
-          dispatch(toggleCustomerActive(selected._id));
-          const message = selected.active ? "deshabilitado" : "habilitado";
-          toast.success(`El cliente ha sido ${message} exitosamente`); 
-        }
+        await dispatch(toggleCustomerActiveThunk(selected._id)).unwrap();
+        toast.success(`El cliente ha sido ${actionPast} exitosamente`);
         handleClose();
-        
       } catch (error) {
-        const message = selected?.active ? "deshabilitar" : "habilitar";
-        toast.error(`Error al ${message} el cliente`);
-        console.log(error);
+        toast.error(`Error al ${action} el cliente`);
+        console.error(error);
       }
     };
 
@@ -119,39 +117,26 @@ export const useCustomerForm = () => {
   /**
    * Submit handler that dispatches create or update actions based on selection.
    */
-  const onSubmit = (data: CustomerFormValues) => {
+  const onSubmit = async(data: CustomerFormValues) => {
     try {
-      const base = {
-        ...selected,
-        ...data,
-        sendMethod: getSendMethodValue(data.sendMethod),
-        activity: data.activity ? Number(data.activity) : undefined,
-        // Change logic when connecting to backend
-        _id: selected?._id || uuidv4(),
-        active: true,
-      };
-  
-      if (selected) {
-        dispatch(updateCustomer(base));
-        const activeCustomerId = (store.getState() as RootState).sales.activeSale?.customer?._id;
-        if (activeCustomerId === base._id) {
-          dispatch(updateActiveSale({ customer: base }));
-        }
-        toast.success("Cliente actualizado exitosamente");
-      } else {
-        dispatch(addCustomer(base));
-        selectCreatedInSale && dispatch(updateActiveSale({ customer: base }));
-        toast.success("Cliente creado exitosamente");
+    const base: Customer = {
+      ...selected,
+      ...data,
+      sendMethod: getSendMethodValue(data.sendMethod),
+      activity: data.activity ? Number(data.activity) : undefined,
+      _id: selected?._id || uuidv4(),
+      active: true,
+    };
 
-      }
+    await dispatch(saveCustomerThunk(base)).unwrap();
 
-      dispatch(setSelectCreatedCustomerInSale(false));
-      dispatch(setActiveCustomer(undefined)); // close dialog after saving
-      
-    } catch (error) {
-      
-      toast.error("Hubo un error al guardar el cliente");
-    }
+    toast.success(selected ? "Cliente actualizado exitosamente" : "Cliente creado exitosamente");
+
+    dispatch(setSelectCreatedCustomerInSale(false));
+    dispatch(setActiveCustomer(undefined)); // close dialog after saving
+  } catch (error) {
+    toast.error("Hubo un error al guardar el cliente");
+  }
   };
 
   // Expose all necessary logic and helpers for use in the form component

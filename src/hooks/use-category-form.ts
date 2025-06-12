@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "@/data/schemas/category-schema";
@@ -9,13 +8,15 @@ import type { Category } from "@/data/types/category";
 import { addCategory, setActiveCategory, toggleCategoryActive, updateCategory } from "@/store/pos/category-slice";
 
 import { toast } from "sonner";
+import { saveCategoryThunk, toggleCategoryActiveThunk } from "@/store/pos/category-thunk";
+import type { AppDispatch } from "@/store/store";
 
 export type CategoryFormInput = z.input<typeof categorySchema>;
 //export type CategoryFormValues = z.infer<typeof categorySchema>;
 
 export const useCategoryForm = (selected: Category | null | undefined) => {
   
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     
       // Initialize react-hook-form with schema-based validation and default values
@@ -46,55 +47,39 @@ export const useCategoryForm = (selected: Category | null | undefined) => {
 
         const handleClose = () => dispatch(setActiveCategory(undefined));
 
-        const handleToggleActive = () => {
+       const handleToggleActive = async () => {
+          if (!selected?._id) return;
+
+          const action = selected.active ? "deshabilitar" : "habilitar";
+          const actionPast = selected.active ? "deshabilitado" : "habilitado";
+
           try {
-            if(selected?._id) {
-              dispatch(toggleCategoryActive(selected._id));
-              const message = selected.active ? "deshabilitado" : "habilitado";
-              toast.success(`El produto ha sido ${message} exitosamente`); 
-            }
-            
+            await dispatch(toggleCategoryActiveThunk(selected._id)).unwrap();
+            toast.success(`El producto ha sido ${actionPast} exitosamente`);
             handleClose();
-            
-          } catch (error) {
-            const message = selected?.active ? "deshabilitar" : "habilitar"
-            toast.error(`Error al ${message} el producto`);
+          } catch (err) {
+            toast.error(`Error al ${action} el producto`);
           }
-       
-        }
+        };
       
          /**
          * Submit handler that dispatches create or update actions based on selection.
          */
-        const onSubmit = (data: CategoryFormInput) => {
-          try {
+        const onSubmit = async(data: CategoryFormInput) => {
+            try {
             const base = {
-            ...selected,
-            ...data,
-            description: data.description ?? "",
-            active: true,
-            
-            // Change this logic when connecting to backend
-            _id: selected?._id || uuidv4(),
+              ...selected,
+              ...data,
+              active: true
             };
-            
-            if (selected) {
-              dispatch(updateCategory(base));
-              toast.success("Categoria modificado exitosamente");
 
-            } else {
-              dispatch(addCategory(base));
-              toast.success("Categoria creado exitosamente");
+            const result = await dispatch(saveCategoryThunk(base)).unwrap();
 
-            }
-
-            dispatch(setActiveCategory(undefined)); // close dialog after saving
+            toast.success(selected ? "Categoría modificada exitosamente" : "Categoría creada exitosamente");
+            dispatch(setActiveCategory(undefined));
           } catch (error) {
-             
-
-            toast.error("Hubo un error al guardar la categoria");
+            toast.error("Hubo un error al guardar la categoría");
           }
-            
         };
 
     return {form, selected, onSubmit, handleToggleActive, handleClose, open}

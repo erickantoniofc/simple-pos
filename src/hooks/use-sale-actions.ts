@@ -2,33 +2,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
 import equal from "fast-deep-equal";
-import { nanoid } from "nanoid";
 
 import {
-  addSale,
-  updateSale,
   updateActiveSale,
   resetActiveSale,
   setActiveSale,
-  cancelSaleById,
 } from "@/store/pos/sale-slice";
 
-import type { RootState } from "@/store/store";
+import type { RootState, AppDispatch } from "@/store/store";
 import { DocumentStatus, type Sale } from "@/data/types/sale";
 import { validateSaleForSave } from "@/helpers/validate-sale-for-save";
 import { validateSaleForSend } from "@/helpers/validate-sale-for-send";
 import { useNavigate } from "react-router-dom";
+import { cancelSaleThunk, saveSaleThunk, sendSaleThunk } from "@/store/pos/sale-thunks";
 
 export const useSaleActions = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const sale = useSelector((state: RootState) => state.sales.activeSale);
   const sales = useSelector((state: RootState) => state.sales.sales);
-  const {activeBranch, activePos} = useSelector((state: RootState) => state.branches);
   const navigate = useNavigate();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [discardConfirmed, setDiscardConfirmed] = useState(false);    
   const  [showSaleSummary, setShowSaleSummary] = useState(false);
-  const isNew = !sale?._id;
 
   const handleNewSaleFromSalesTable = () => {
     dispatch(setActiveSale());
@@ -54,65 +49,51 @@ export const useSaleActions = () => {
   }
 
   
-  const onCancelSaleAction = (saleId: string) => {
-    dispatch(cancelSaleById(saleId));
-    toast.success("El documento ha sido anulado exitosamente");
-    setShowSaleSummary(false);
-  }
+  const onCancelSaleAction = async (saleId: string) => {
+    try {
+      await dispatch(cancelSaleThunk(saleId)).unwrap();
+      toast.success("El documento ha sido anulado exitosamente");
+      setShowSaleSummary(false);
+    } catch (err) {
+      toast.error("Ocurrió un error al anular el documento");
+    }
+  };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!sale) return;
 
     const errors = validateSaleForSave(sale);
-    if (errors.length) {
-      toast.error(errors[0]);
+    if (errors.length > 0) {
+      toast.error(errors[0]); 
       return;
     }
 
-    const saleToSave = {
-      ...sale,
-      status: DocumentStatus.SAVE,
-      branchId: activeBranch.id,
-      posId: activePos.id,
-      _id: sale._id ?? nanoid(),
-    };
-    const now = new Date().getTime().toString();  
-    if (isNew) {
-      dispatch(addSale({ ...saleToSave, date: now }));
-    } else {
-      dispatch(updateSale(saleToSave));
+    try {
+      await dispatch(saveSaleThunk(sale)).unwrap(); 
+      toast.success("Venta guardada correctamente.");
+    } catch (err) {
+      toast.error(typeof err === "string" ? err : "Error al guardar la venta.");
+    }
+  };
+
+   const handleSend = async (): Promise<Sale | null> => {
+    if (!sale) return null;
+
+    const errors = validateSaleForSend(sale);
+    if (errors.length > 0) {
+      toast.error(errors[0]); 
+      return null;
     }
 
-    dispatch(updateActiveSale({ ...saleToSave }));
-    toast.success("Venta guardada correctamente.");
+    try {
+      const result = await dispatch(sendSaleThunk(sale)).unwrap() as Sale;
+      toast.success("Venta enviada correctamente.");
+      return result; // ✅ retorna la Sale
+    } catch (err) {
+      toast.error(typeof err === "string" ? err : "Error al enviar la venta.");
+      return null;
+    }
   };
-
-  const handleSend = (): Sale | null => {
-  if (!sale) return null;
-  const errors = validateSaleForSend(sale);
-  if (errors.length) {
-    toast.error(errors[0]);
-    return null;
-  }
-
-  const now = new Date().getTime().toString();
-  const saleToSend = {
-    ...sale,
-    status: DocumentStatus.SEND,
-    _id: sale._id ?? nanoid(),
-  };
-
-  if (isNew) {
-    dispatch(addSale({ ...saleToSend, date: now, branchId: activeBranch.id, posId: activePos.id }));
-  } else {
-    dispatch(updateSale({ ...saleToSend, sendDate: now }));
-  }
-
-  dispatch(resetActiveSale());
-  toast.success("Venta enviada correctamente.");
-
-  return saleToSend;
-};
 
   const checkUnsavedChanges = useCallback(() => {
     if (!sale) return false;

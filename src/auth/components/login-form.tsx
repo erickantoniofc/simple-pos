@@ -17,6 +17,7 @@ import {
   Label,
   Button
 } from "@/components"
+import { ModeToggle } from "@/components/mode-toggle";
 
 
 export const LoginForm = ({
@@ -36,7 +37,14 @@ export const LoginForm = ({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Inicia sesion</CardTitle>
+          <div className="flex align-middle">
+            <div className="flex-1">
+            <CardTitle>Inicia sesion</CardTitle>
+
+            </div>
+          <ModeToggle/>
+
+          </div>
           <CardDescription>
             Ingresa tus credenciales para acceder
           </CardDescription>

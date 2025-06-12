@@ -138,7 +138,7 @@ export const ProductForm = () => {
                             key={cat._id}
                             value={cat.name}
                             onSelect={() => {
-                                form.setValue("category", cat._id, 
+                                form.setValue("category", cat._id ?? "", 
                                 { shouldValidate: true, 
                                   shouldTouch: true,
                                   shouldDirty: true, });

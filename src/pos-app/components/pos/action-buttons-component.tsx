@@ -30,13 +30,14 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
   const [showSummary, setShowSummary] = useState(false);
   const navigate = useNavigate();
 
-  const handleSendClick = () => {
-    const result = handleSend();
+  const handleSendClick = async () => {
+    const result = await handleSend(); 
     if (result) {
       setSentSale(result);
       setShowSummary(true);
     }
   };
+
 
   return (
     <>
@@ -106,9 +107,6 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
           onGoToSales={() => {
             setShowSummary(false);
             navigate("/facturas");
-          }}
-          onPrint={() => {
-            console.log("imprimiendo");
           }}
           onResend={() => {
             console.log("reenviando");

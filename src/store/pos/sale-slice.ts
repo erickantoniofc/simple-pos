@@ -30,6 +30,7 @@ export const saleSlice = createSlice({
         setActiveSale: (state) => {
             state.activeSale = {
                saleItems: [],
+               posId: '',
                customer: undefined,
                documentType: 1,
                status: DocumentStatus.INIT,

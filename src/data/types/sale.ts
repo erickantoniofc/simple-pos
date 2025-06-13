@@ -22,12 +22,12 @@ export interface Sale {
     posId: string;
     saleItems: SaleItem[];
     customer?: Customer;
-    documentType: number; 
+    documentType: number;
     status: number;
     documentNumber: string;
     paymentTerm: [number, string];
     paymentMethod: string;
     transactionTerm: string;
     cancelledDate?: string;
-
+    signedDTE?: unknown;
 }

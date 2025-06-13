@@ -10,16 +10,16 @@ export const PosRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<PosLayout />} >
-        <Route index element={<PosPage />} />       
+        <Route index element={<PosPage />} />
         <Route path="pos" element={<PosPage />} />
         <Route path="productos" element={<ProductsPage />} />
         <Route path="clientes" element={<CustomersPage />} />
         <Route path="facturas" element={<SalesPage />} />
         <Route path="categorias" element={<CategoriesPage />} />
-        <Route path="/*" element={<PosPage />}/>
-        
+        <Route path="/*" element={<PosPage />} />
+
       </Route>
-      
+
     </Routes>
   )
 }

@@ -22,8 +22,8 @@ export const useSaleActions = () => {
   const sales = useSelector((state: RootState) => state.sales.sales);
   const navigate = useNavigate();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
-  const [discardConfirmed, setDiscardConfirmed] = useState(false);    
-  const  [showSaleSummary, setShowSaleSummary] = useState(false);
+  const [, setDiscardConfirmed] = useState(false);
+  const [showSaleSummary, setShowSaleSummary] = useState(false);
 
   const handleNewSaleFromSalesTable = () => {
     dispatch(setActiveSale());
@@ -32,14 +32,14 @@ export const useSaleActions = () => {
   };
 
   const handleRowClick = (sale: Sale) => {
-    if(sale?.status === DocumentStatus.SAVE) {
-        navigate("/pos")
-        dispatch(setActiveSale());
-        dispatch(updateActiveSale(sale));
+    if (sale?.status === DocumentStatus.SAVE) {
+      navigate("/pos")
+      dispatch(setActiveSale());
+      dispatch(updateActiveSale(sale));
     }
     else {
-        dispatch(updateActiveSale(sale));
-        setShowSaleSummary(true);
+      dispatch(updateActiveSale(sale));
+      setShowSaleSummary(true);
     }
   }
 
@@ -48,13 +48,13 @@ export const useSaleActions = () => {
     dispatch(setActiveSale());
   }
 
-  
+
   const onCancelSaleAction = async (saleId: string) => {
     try {
       await dispatch(cancelSaleThunk(saleId)).unwrap();
       toast.success("El documento ha sido anulado exitosamente");
       setShowSaleSummary(false);
-    } catch (err) {
+    } catch {
       toast.error("Ocurrió un error al anular el documento");
     }
   };
@@ -64,24 +64,24 @@ export const useSaleActions = () => {
 
     const errors = validateSaleForSave(sale);
     if (errors.length > 0) {
-      toast.error(errors[0]); 
+      toast.error(errors[0]);
       return;
     }
 
     try {
-      await dispatch(saveSaleThunk(sale)).unwrap(); 
+      await dispatch(saveSaleThunk(sale)).unwrap();
       toast.success("Venta guardada correctamente.");
     } catch (err) {
       toast.error(typeof err === "string" ? err : "Error al guardar la venta.");
     }
   };
 
-   const handleSend = async (): Promise<Sale | null> => {
+  const handleSend = async (): Promise<Sale | null> => {
     if (!sale) return null;
 
     const errors = validateSaleForSend(sale);
     if (errors.length > 0) {
-      toast.error(errors[0]); 
+      toast.error(errors[0]);
       return null;
     }
 
@@ -100,7 +100,9 @@ export const useSaleActions = () => {
     const original = sales.find((s) => s._id === sale._id);
     if (!original) return true;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { date, sendDate, ...restSale } = sale;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { date: origDate, sendDate: origSendDate, ...restOriginal } = original;
 
     return !equal(restSale, restOriginal);

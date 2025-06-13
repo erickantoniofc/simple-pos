@@ -4,11 +4,12 @@ import type { RootState } from "@/store/store";
 import { DocumentStatus, DocumentType, type Sale } from "@/data/types/sale";
 import { addSale, updateSale, resetActiveSale, updateActiveSale, cancelSaleById } from "@/store/pos/sale-slice";
 import { saleToFe } from "@/helpers/sale-to-fe";
+import { dteService } from "@/services/dte.service";
 import { v4 as uuidv4 } from "uuid";
 
 export const sendSaleThunk = createAsyncThunk<
-  Sale,           
-  Sale,           
+  Sale,
+  Sale,
   { state: RootState }
 >("sales/send", async (sale, { getState, dispatch, rejectWithValue }) => {
   try {
@@ -31,12 +32,23 @@ export const sendSaleThunk = createAsyncThunk<
       posId: sale.posId ?? activePos.id
     };
 
-    if(sale.documentType === DocumentType.FE) {
+    if (sale.documentType === DocumentType.FE) {
       const dte = saleToFe(saleToSend, activeBranch, activePos, "000000000000001", company);
-      console.log("Generated DTE:", dte);
 
+      const validationErrors = dteService.validateDTE(dte);
+      if (validationErrors.length > 0) {
+        return rejectWithValue(`DTE validation failed: ${validationErrors.join(', ')}`);
+      }
+
+      const signResult = await dteService.signDTE(dte);
+
+      if (!signResult.success) {
+        return rejectWithValue(`Failed to sign DTE: ${signResult.error}`);
+      }
+
+      saleToSend.signedDTE = signResult.signedDTE;
     }
-    
+
     if (isNew) {
       dispatch(addSale(saleToSend));
     } else {
@@ -45,8 +57,7 @@ export const sendSaleThunk = createAsyncThunk<
 
     dispatch(resetActiveSale());
     return saleToSend;
-  } catch (err) {
-    console.error("Error al enviar venta:", err);
+  } catch {
     return rejectWithValue("Ocurrió un error inesperado al enviar la venta");
   }
 });
@@ -85,7 +96,7 @@ export const cancelSaleThunk = createAsyncThunk<
   string, // recibe saleId
   { state: RootState }
 >("sales/cancel", async (saleId, { dispatch }) => {
-  
+
   dispatch(cancelSaleById(saleId));
   return saleId;
 });

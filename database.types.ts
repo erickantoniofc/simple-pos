@@ -9,6 +9,129 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      branches: {
+        Row: {
+          active: boolean
+          address: string
+          commercial_name: string
+          created_at: string | null
+          department: string
+          hacienda_code: string
+          id: string
+          municipality: string
+          name: string
+          stablishment_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean
+          address: string
+          commercial_name: string
+          created_at?: string | null
+          department: string
+          hacienda_code: string
+          id?: string
+          municipality: string
+          name: string
+          stablishment_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          address?: string
+          commercial_name?: string
+          created_at?: string | null
+          department?: string
+          hacienda_code?: string
+          id?: string
+          municipality?: string
+          name?: string
+          stablishment_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          active: boolean
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      customers: {
+        Row: {
+          active: boolean
+          activity: number | null
+          address: string | null
+          created_at: string | null
+          department: string | null
+          dui: string | null
+          email: string | null
+          id: string
+          municipality: string | null
+          name: string
+          nit: string | null
+          nrc: string | null
+          phone: string | null
+          send_method: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean
+          activity?: number | null
+          address?: string | null
+          created_at?: string | null
+          department?: string | null
+          dui?: string | null
+          email?: string | null
+          id?: string
+          municipality?: string | null
+          name: string
+          nit?: string | null
+          nrc?: string | null
+          phone?: string | null
+          send_method?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          activity?: number | null
+          address?: string | null
+          created_at?: string | null
+          department?: string | null
+          dui?: string | null
+          email?: string | null
+          id?: string
+          municipality?: string | null
+          name?: string
+          nit?: string | null
+          nrc?: string | null
+          phone?: string | null
+          send_method?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       dte: {
         Row: {
           control_number: string | null
@@ -29,6 +152,88 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      pos_points: {
+        Row: {
+          active: boolean
+          branch_id: string
+          created_at: string | null
+          hacienda_code: string
+          id: string
+          location: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean
+          branch_id: string
+          created_at?: string | null
+          hacienda_code: string
+          id?: string
+          location: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          branch_id?: string
+          created_at?: string | null
+          hacienda_code?: string
+          id?: string
+          location?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_points_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean
+          category: string | null
+          created_at: string | null
+          id: string
+          image_url: string | null
+          name: string
+          price: number
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          price: number
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_category"
+            columns: ["category"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -57,6 +262,131 @@ export type Database = {
         }
         Relationships: []
       }
+      sale_items: {
+        Row: {
+          created_at: string | null
+          discount: number
+          id: string
+          price: number
+          product: Json
+          product_id: string | null
+          quantity: number
+          sale_id: string
+          subtotal: number
+          total: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          discount: number
+          id?: string
+          price: number
+          product: Json
+          product_id?: string | null
+          quantity: number
+          sale_id: string
+          subtotal: number
+          total: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          discount?: number
+          id?: string
+          price?: number
+          product?: Json
+          product_id?: string | null
+          quantity?: number
+          sale_id?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_sale_items_product"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sale_items_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          cancelled_date: string | null
+          created_at: string | null
+          customer: Json | null
+          customer_id: string | null
+          date: string | null
+          document_number: string
+          document_type: number
+          id: string
+          payment_method: string
+          payment_term: Json
+          pos_id: string
+          send_date: string | null
+          signed_dte: Json | null
+          status: number
+          total: number
+          transaction_term: string
+          updated_at: string | null
+        }
+        Insert: {
+          cancelled_date?: string | null
+          created_at?: string | null
+          customer?: Json | null
+          customer_id?: string | null
+          date?: string | null
+          document_number: string
+          document_type: number
+          id?: string
+          payment_method: string
+          payment_term: Json
+          pos_id: string
+          send_date?: string | null
+          signed_dte?: Json | null
+          status: number
+          total: number
+          transaction_term: string
+          updated_at?: string | null
+        }
+        Update: {
+          cancelled_date?: string | null
+          created_at?: string | null
+          customer?: Json | null
+          customer_id?: string | null
+          date?: string | null
+          document_number?: string
+          document_type?: number
+          id?: string
+          payment_method?: string
+          payment_term?: Json
+          pos_id?: string
+          send_date?: string | null
+          signed_dte?: Json | null
+          status?: number
+          total?: number
+          transaction_term?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_sales_customer"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sequential_counters: {
         Row: {
           counter_key: string
@@ -80,7 +410,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

@@ -4,21 +4,33 @@ import type { ComprobanteCreditoFiscal } from '@/data/types/dte-ccf'
 
 export interface SignDTERequest {
   dte: FacturaElectronica | ComprobanteCreditoFiscal
+  branchCode: string
+  posCode: string
+  documentType?: string
 }
 
 export interface SignDTEResponse {
   success: boolean
   signedDTE?: unknown
+  controlNumber?: string
   error?: string
   details?: unknown
 }
 
 export const dteService = {
-  async signDTE(dteData: FacturaElectronica | ComprobanteCreditoFiscal): Promise<SignDTEResponse> {
+  async signDTE(
+    dteData: FacturaElectronica | ComprobanteCreditoFiscal,
+    branchCode: string,
+    posCode: string,
+    documentType: string = '01'
+  ): Promise<SignDTEResponse> {
     try {
       const { data, error } = await supabase.functions.invoke('sign-dte', {
         body: {
-          dte: dteData
+          dte: dteData,
+          branchCode,
+          posCode,
+          documentType
         }
       })
 
@@ -36,7 +48,8 @@ export const dteService = {
 
       return {
         success: true,
-        signedDTE: data.result || data
+        signedDTE: data.result || data,
+        controlNumber: data.controlNumber
       }
 
     } catch (error: unknown) {
@@ -69,12 +82,8 @@ export const dteService = {
       errors.push('Missing resumen section')
     }
 
-    if (dte.identificacion) {
-
-      if (!dte.identificacion.numeroControl) {
-        errors.push('Missing numeroControl in identificacion')
-      }
-    }
+    // Note: numeroControl will be generated automatically by the sign-dte endpoint
+    // so we don't need to validate it here anymore
 
     return errors
   }

@@ -8,7 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "vite build && vite gh-pages"
+    "deploy": "vite build && vite gh-pages",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:status": "supabase status",
+    "types:generate": "supabase gen types typescript --project-id sbzwnhutqasgvfznipec > database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -39,6 +44,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.511.0",
     "next-themes": "^0.4.6",
+    "node-fetch": "^3.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.57.0",

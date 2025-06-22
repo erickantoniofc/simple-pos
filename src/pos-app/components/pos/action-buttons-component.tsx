@@ -24,7 +24,8 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
     showDiscardDialog,
     setShowDiscardDialog,
     confirmDiscard,
-    saveLoading
+    saveLoading,
+    sendLoading
   } = useSaleActions();
 
   const [sentSale, setSentSale] = useState<Sale | null>(null);
@@ -49,7 +50,7 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             <PaymentMethodComponent />
           </div>
 
-          <Button disabled={saveLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
+          <Button disabled={saveLoading || sendLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
             {saveLoading ? (
               <Loader2 className="animate-spin h-4 w-4 mr-1" />
             ) : (
@@ -57,9 +58,18 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             )}
           </Button>
 
-          <Button disabled={saveLoading} onClick={handleSendClick} className="col-span-6 h-10 text-accent-foreground cursor-pointer">
-            <Send className="h-4 w-4 mr-1" />
-            Enviar DTE
+          <Button disabled={saveLoading || sendLoading} onClick={handleSendClick} className="col-span-6 h-10 text-accent-foreground cursor-pointer">
+            {
+              sendLoading
+              ? (<Loader2 className="animate-spin h-4 w-4 mr-1" />)
+              : (
+                <>
+                  <Send className="h-4 w-4 mr-1" />
+                  Enviar DTE
+                </>
+              )
+            }
+            
           </Button>
         </div>
       )}
@@ -70,7 +80,7 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             <PaymentMethodComponent />
           </div>
 
-          <Button disabled={saveLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
+          <Button disabled={saveLoading || sendLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
             {saveLoading ? (
               <Loader2 className="animate-spin h-4 w-4 mr-1" />
             ) : (
@@ -78,9 +88,15 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             )}
           </Button>
 
-          <Button disabled={saveLoading} onClick={handleSendClick} className="col-span-4 h-10 text-accent-foreground cursor-pointer">
-            <Send className="h-4 w-4 mr-1" />
-            Enviar DTE
+          <Button disabled={saveLoading || sendLoading} onClick={handleSendClick} className="col-span-4 h-10 text-accent-foreground cursor-pointer">
+            {
+              sendLoading
+              ? (<Loader2 className="animate-spin h-4 w-4 mr-1" />)
+              : <>
+                  <Send className="h-4 w-4 mr-1" />
+                  Enviar DTE
+                </>
+            }
           </Button>
 
           <Button onClick={handleNewSale} className="col-span-2 h-10 text-accent-foreground cursor-pointer">

@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { DocumentStatus, type Sale, type SalesState } from '@/data/types/sale';
 import type { SaleItem } from '@/data/types/sale-item';
-import { getAllSalesThunk, saveSaleThunk } from './sale-thunks';
+import { getAllSalesThunk, saveSaleThunk, sendSaleThunk } from './sale-thunks';
 
 
 
@@ -10,6 +10,7 @@ const initialState: SalesState = {
     activeSale: null,
     loading: false,
     saveLoading: false,
+    sendLoading: false,
     error: null,
     listLoading: false
 }
@@ -147,6 +148,20 @@ export const saleSlice = createSlice({
     .addCase(saveSaleThunk.rejected, (state, action) => {
       state.saveLoading = false;
       state.error = action.payload as string;
+    }
+    )
+
+    // Enviar venta
+    .addCase(sendSaleThunk.fulfilled, (state) => {
+        state.sendLoading = false;
+    })
+    .addCase(sendSaleThunk.pending, (state) => {
+        state.sendLoading = true;
+        state.error = null;
+    })
+    .addCase(sendSaleThunk.rejected, (state, action) => {
+        state.sendLoading = false;
+        state.error = action.payload as string;
     }
     );
 }

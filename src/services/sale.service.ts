@@ -4,7 +4,7 @@ import { mapToCamel, mapToSnake } from "@/helpers/case-converters";
 
 export async function createSale(sale: Sale): Promise<Sale> {
   const { saleItems, ...saleData } = sale;
-
+  console.log('Creating sale', sale);
   // Inserta en tabla sales
   const { data: saleInserted, error: saleError } = await supabase
     .from("sales")
@@ -34,6 +34,7 @@ export async function updateSale(sale: Sale): Promise<Sale> {
   if (!sale.id) throw new Error("Sale ID requerido para actualizar");
 
   const { saleItems, ...saleData } = sale;
+  console.log('Updating sale', sale);
 
   // Actualiza venta principal
   const { error: saleError } = await supabase

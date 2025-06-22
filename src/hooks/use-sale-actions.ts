@@ -19,7 +19,7 @@ import { cancelSaleThunk, saveSaleThunk, sendSaleThunk } from "@/store/pos/sale-
 export const useSaleActions = () => {
   const dispatch: AppDispatch = useDispatch();
   const sale = useSelector((state: RootState) => state.sales.activeSale);
-  const {saveLoading} = useSelector((state: RootState) => state.sales);
+  const {saveLoading, sendLoading} = useSelector((state: RootState) => state.sales);
   const sales = useSelector((state: RootState) => state.sales.sales);
   const navigate = useNavigate();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
@@ -79,7 +79,6 @@ export const useSaleActions = () => {
 
   const handleSend = async (): Promise<Sale | null> => {
     if (!sale) return null;
-
     const errors = validateSaleForSend(sale);
     if (errors.length > 0) {
       toast.error(errors[0]);
@@ -143,6 +142,7 @@ export const useSaleActions = () => {
     sale,
     sales,
     handleCloseSaleSummary,
-    saveLoading
+    saveLoading,
+    sendLoading
   };
 };

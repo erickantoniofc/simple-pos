@@ -47,7 +47,7 @@ export const CustomerDialog = () => {
             <Button disabled={loading || toggleLoading} form="customer-form" type="submit" className="text-foreground cursor-pointer">
                {loading 
                ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> 
-               : <span><Save className="h-4 w-4 mr-2" /> Guardar</span>}
+               : <><Save className="h-4 w-4 mr-2" /> Guardar</>}
             </Button>
             {selected && (
               <Button

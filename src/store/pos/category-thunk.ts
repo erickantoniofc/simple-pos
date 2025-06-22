@@ -68,7 +68,6 @@ export const loadCategoriesThunk = createAsyncThunk<Category[]>(
   "categories/loadAll",
   async () => {
     const result = await getAllCategories();
-    console.log(result)
     return result;
   }
 );

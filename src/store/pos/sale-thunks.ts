@@ -21,7 +21,10 @@ export const sendSaleThunk = createAsyncThunk<
     const isNew = !sale?.id;
 
     if (!sale) return rejectWithValue("No hay venta activa");
-
+    const posId = sale.posId?.trim() || activePos?.id?.trim();
+    if (!posId) {
+        return rejectWithValue("Debe seleccionar un punto de venta válido");
+      }
 
     const now = new Date().toISOString();
     const saleToSend: Sale = {
@@ -29,7 +32,7 @@ export const sendSaleThunk = createAsyncThunk<
       status: DocumentStatus.SEND,
       sendDate: now,
       date: sale.date ?? now,
-      posId: sale.posId ?? activePos.id
+      posId
     };
 
     if (sale.documentType === DocumentType.FE) {
@@ -49,14 +52,15 @@ export const sendSaleThunk = createAsyncThunk<
       saleToSend.signedDTE = signResult.signedDTE;
     }
 
+    let persistedSale: Sale;
     if (isNew) {
-      dispatch(addSale(saleToSend));
+      persistedSale = await createSale(saleToSend);
     } else {
-      await updateSale(saleToSend);
+      persistedSale = await updateSale(saleToSend);
     }
 
     dispatch(resetActiveSale());
-    return saleToSend;
+    return persistedSale;
   } catch(error) {
     console.log("Error al enviar la venta:", error);
     return rejectWithValue("Ocurrió un error inesperado al enviar la venta");

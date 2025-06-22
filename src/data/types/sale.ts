@@ -40,4 +40,5 @@ export interface SalesState {
     saveLoading: boolean,  
     error: string | null;
     listLoading: boolean;
+    sendLoading: boolean;
 }

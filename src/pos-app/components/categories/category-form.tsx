@@ -13,7 +13,7 @@ export const CategoryForm = ({form, onSubmit} : {form: any, onSubmit: any}) => {
             name="name"
             render={({field}) => (
                 <FormItem className="w-full">
-                    <FormLabel>Nombre del producto:</FormLabel>
+                    <FormLabel>Nombre de la categoria:</FormLabel>
                     <FormControl>
                         <Input 
                         {...field}

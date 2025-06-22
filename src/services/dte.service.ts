@@ -70,9 +70,7 @@ export const dteService = {
     }
 
     if (dte.identificacion) {
-      if (!dte.identificacion.codigoGeneracion) {
-        errors.push('Missing codigoGeneracion in identificacion')
-      }
+
       if (!dte.identificacion.numeroControl) {
         errors.push('Missing numeroControl in identificacion')
       }

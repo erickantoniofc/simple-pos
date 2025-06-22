@@ -31,9 +31,9 @@ export const CartCard = ({
 
         {/* Header */}
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-lg font-semibold">{sale?._id ? "Editar venta" : "Nueva venta"}</h2>
-          {sale?._id && (
-            <p className="text-xs text-muted-foreground">ID: {sale._id}</p>
+          <h2 className="text-lg font-semibold">{sale?.id ? "Editar venta" : "Nueva venta"}</h2>
+          {sale?.id && (
+            <p className="text-xs text-muted-foreground">ID: {sale.id}</p>
           )}
           {(sale?.status === DocumentStatus.INIT || sale?.status === DocumentStatus.SAVE) && (
             <Button onClick={clearCart} variant="ghost" className="text-destructive cursor-pointer">
@@ -50,7 +50,7 @@ export const CartCard = ({
           <div className="space-y-3">
             {saleItems.map(item => (
               <CartCardItem
-                key={item.product._id}
+                key={item.product.id}
                 item={item}
                 handleQuantityChange={handleQuantityChange}
                 onInputChange={onInputChange}

@@ -1,7 +1,7 @@
 import type { Product } from "./product";
 
 export interface SaleItem {
-    _id?: string;
+    id: string;
     product: Product;
     quantity: number;
     price: number;

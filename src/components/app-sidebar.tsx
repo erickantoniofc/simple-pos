@@ -18,6 +18,15 @@ import { CircleUserRound, FilePlus, List, PackageSearch, SquareMousePointer } fr
 import { UserSwitcher } from "./user-switcher"
 import { BranchStepper } from "./branch-stepper";
 import { ModeToggle } from "./mode-toggle";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBranches } from "@/store/pos/branch-thunk";
+import type { AppDispatch, RootState } from "@/store/store";
+import { fetchProducts } from "@/store/pos/product-thunk";
+import { loadCategoriesThunk } from "@/store/pos/category-thunk";
+import { loadCustomersThunk } from "@/store/pos/customer-thunk";
+import { getAllSales } from "@/services/sale.service";
+import { getAllSalesThunk } from "@/store/pos/sale-thunks";
 
 
 export const AppSidebar = () => {
@@ -31,6 +40,20 @@ export const AppSidebar = () => {
     { to: "/categorias", icon: <List />, label: "Categorias" },
     { to: "/clientes", icon: <CircleUserRound />, label: "Clientes" },
     ];
+
+    const profile = useSelector((state: RootState) => state.auth.profile);
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+      if (profile) {
+        dispatch(fetchBranches());
+        dispatch(fetchProducts());
+        dispatch(loadCategoriesThunk());
+        dispatch(loadCustomersThunk());
+        dispatch(getAllSalesThunk());
+      }
+    }, [dispatch, profile]);
+    const {branches, activeBranch} = useSelector((state: RootState) => state.branches);
+
   return (
     <Sidebar collapsible="icon">
       
@@ -69,7 +92,7 @@ export const AppSidebar = () => {
       
       <SidebarFooter>
         {
-            state === "expanded" && <BranchStepper />
+            branches.length > 0 && activeBranch?.id && state === "expanded" && <BranchStepper />
         }
             
 

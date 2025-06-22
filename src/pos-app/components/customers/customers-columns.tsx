@@ -3,7 +3,7 @@ import { type Customer } from "@/data/types/customer"
 
 export const customerColumns: ColumnDef<Customer>[] = [
   {
-    accessorKey: "_id",
+    accessorKey: "id",
     header: "ID",
     size: 50,
   },

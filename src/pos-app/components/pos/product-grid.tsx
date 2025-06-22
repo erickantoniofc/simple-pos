@@ -10,9 +10,9 @@ import { ScrollArea } from "@/components";
 export const ProductGrid = (
   {selectedCategories, searchText,} : {selectedCategories: Category[]; searchText: string;}
   ) => {
-  const products : Product[] = useSelector((state: RootState) => state.products.products);
-  
-  const selectedIds = selectedCategories.map((c) => c._id);
+  const productsRaw : Product[] = useSelector((state: RootState) => state.products.products);
+  const products = productsRaw.filter((p) => p.active);
+  const selectedIds = selectedCategories.map((c) => c.id);
   const text = searchText.trim().toLowerCase();
   const filteredProducts = products.filter((p) => {
     const matchesCategory = selectedIds.length === 0 || selectedIds.includes(p.category);
@@ -27,7 +27,7 @@ export const ProductGrid = (
 
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4 w-full justify-items-center">
         {filteredProducts.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard key={product.id} product={product} />
         ))}
         </div>
       </ScrollArea>

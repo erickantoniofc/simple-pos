@@ -28,8 +28,8 @@ export const CustomerSelectComponent = () => {
   const dispatch = useDispatch();
 
   const onCustomerSelect = (customer: Customer) => {
-    const isSelected = customer._id === activeCustomer?._id;
-    dispatch(updateActiveSale({ customer: isSelected ? undefined : customer }));
+    const isSelected = customer.id === activeCustomer?.id;
+    dispatch(updateActiveSale({ customer: isSelected ? undefined : customer, customerId: isSelected ? undefined : customer.id }));
     setOpen(false);
   };
 
@@ -71,7 +71,8 @@ export const CustomerSelectComponent = () => {
                     .map((customer) => (
                       
                         <CommandItem
-                          value={`${customer.name} ${customer._id} ${customer.nrc ?? ""} ${customer.dui ?? ""}`.toLowerCase()}
+                          key={customer.id}
+                          value={`${customer.name} ${customer.id} ${customer.nrc ?? ""} ${customer.dui ?? ""}`.toLowerCase()}
                           onSelect={() => onCustomerSelect(customer)}
                           className="py-2"
                         >
@@ -88,7 +89,7 @@ export const CustomerSelectComponent = () => {
                           <Check
                             className={cn(
                               "ml-auto",
-                              activeCustomer?._id === customer._id ? "opacity-100" : "opacity-0"
+                              activeCustomer?.id === customer.id ? "opacity-100" : "opacity-0"
                             )}
                           />
                         </CommandItem>

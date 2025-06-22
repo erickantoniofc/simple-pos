@@ -15,12 +15,13 @@ export const DocumentStatus = {
 }
 
 export interface Sale {
-    _id?: string;
+    id?: string;
     date?: string;
     sendDate?: string;
     total: number;
     posId: string;
     saleItems: SaleItem[];
+    customerId?: string;
     customer?: Customer;
     documentType: number;
     status: number;
@@ -30,4 +31,13 @@ export interface Sale {
     transactionTerm: string;
     cancelledDate?: string;
     signedDTE?: unknown;
+}
+
+export interface SalesState {
+    sales: Sale[];
+    activeSale: Sale | null;
+    loading: boolean;
+    saveLoading: boolean,  
+    error: string | null;
+    listLoading: boolean;
 }

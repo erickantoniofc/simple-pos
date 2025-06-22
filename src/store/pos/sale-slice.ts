@@ -1,15 +1,17 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { DocumentStatus, type Sale } from '@/data/types/sale';
+import { DocumentStatus, type Sale, type SalesState } from '@/data/types/sale';
 import type { SaleItem } from '@/data/types/sale-item';
+import { getAllSalesThunk, saveSaleThunk } from './sale-thunks';
 
-interface SalesState {
-    sales: Sale[];
-    activeSale: Sale | null;
-}
+
 
 const initialState: SalesState = {
     sales: [],
     activeSale: null,
+    loading: false,
+    saveLoading: false,
+    error: null,
+    listLoading: false
 }
 
 export const saleSlice = createSlice({
@@ -22,7 +24,7 @@ export const saleSlice = createSlice({
         updateSale: (state, action: PayloadAction<Sale>) => {
             state.sales = state.sales.map(
                 sale => 
-                    sale._id === action.payload._id
+                    sale.id === action.payload.id
                 ? {...sale, ...action.payload}
                 : sale
             ); 
@@ -50,7 +52,7 @@ export const saleSlice = createSlice({
             if (!state.activeSale) return;
 
             const existingItem = state.activeSale.saleItems.find(
-                item => item.product._id === action.payload.product._id
+                item => item.product.id === action.payload.product.id
             );
 
             if(existingItem) {
@@ -66,7 +68,7 @@ export const saleSlice = createSlice({
         },
         updateItemQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
             if (!state.activeSale) return;
-            const item = state.activeSale.saleItems.find(i => i.product._id === action.payload.productId);
+            const item = state.activeSale.saleItems.find(i => i.product.id === action.payload.productId);
             if (item) {
                 item.quantity = action.payload.quantity;
                 item.subtotal = item.quantity * item.price;
@@ -76,7 +78,7 @@ export const saleSlice = createSlice({
         },
         removeItemFromActiveSale: (state, action: PayloadAction<string>) => {
             if (!state.activeSale) return;
-            state.activeSale.saleItems = state.activeSale.saleItems.filter(item => item.product._id !== action.payload);
+            state.activeSale.saleItems = state.activeSale.saleItems.filter(item => item.product.id !== action.payload);
             state.activeSale.total = state.activeSale.saleItems.reduce((acc, item) => acc + item.total, 0);
         },
         resetActiveSale: (state) => {
@@ -84,7 +86,7 @@ export const saleSlice = createSlice({
         },
         updateItemPrice: (state, action: PayloadAction<{ productId: string; price: number }>) => {
             if (!state.activeSale) return;
-            const item = state.activeSale.saleItems.find(i => i.product._id === action.payload.productId);
+            const item = state.activeSale.saleItems.find(i => i.product.id === action.payload.productId);
             if (item) {
                 item.price = action.payload.price;
                 item.subtotal = item.price * item.quantity;
@@ -93,7 +95,7 @@ export const saleSlice = createSlice({
             state.activeSale.total = state.activeSale.saleItems.reduce((acc, item) => acc + item.total, 0);
         },
         removeSale: (state, action: PayloadAction<string>) => {
-            state.sales = state.sales.filter(sale => sale._id !== action.payload);
+            state.sales = state.sales.filter(sale => sale.id !== action.payload);
         },
         clearSaleItems: (state) => {
         if (state.activeSale) {
@@ -103,15 +105,52 @@ export const saleSlice = createSlice({
         },
         cancelSaleById: (state, action: PayloadAction<string>) => {
         const saleId = action.payload;
-        const sale = state.sales.find((s) => s._id === saleId);
+        const sale = state.sales.find((s) => s.id === saleId);
         if (sale) {
             sale.status = DocumentStatus.CANCELLED;
             sale.cancelledDate = Date.now().toString(); // o new Date().getTime()
         }
 },
         
+    },
+    extraReducers: (builder) => {
+  builder
+    // Carga de ventas
+    .addCase(getAllSalesThunk.pending, (state) => {
+      state.listLoading = true;
+      state.error = null;
+    })
+    .addCase(getAllSalesThunk.fulfilled, (state, action) => {
+      state.listLoading = false;
+      state.sales = action.payload;
+    })
+    .addCase(getAllSalesThunk.rejected, (state, action) => {
+      state.listLoading = false;
+      state.error = action.payload as string;
+    })
+
+    // Guardar o actualizar venta
+    .addCase(saveSaleThunk.fulfilled, (state, action) => {
+      state.saveLoading = false;
+      const index = state.sales.findIndex(s => s.id === action.payload.id);
+      if (index >= 0) {
+        state.sales[index] = action.payload;
+      } else {
+        state.sales.push(action.payload);
+      }
+      state.activeSale = action.payload;
+    })
+    .addCase(saveSaleThunk.pending, (state) => {
+      state.saveLoading = true;
+      state.error = null;
+    })
+    .addCase(saveSaleThunk.rejected, (state, action) => {
+      state.saveLoading = false;
+      state.error = action.payload as string;
     }
-});
+    );
+}
+})
 
 export const {
     updateSale, 

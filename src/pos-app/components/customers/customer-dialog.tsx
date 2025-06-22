@@ -10,13 +10,13 @@ import {
   Button,
   ScrollArea
 } from "@/components";
-import { Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import { CustomerForm } from "@/pos-app/components/customers/customer-form";
 import { useCustomerForm } from "@/hooks/use-customer-form";
 
 export const CustomerDialog = () => {
   const selected = useSelector((state: RootState) => state.customers.selectedCustomer);
-  const {open, handleToggleActive, handleClose} = useCustomerForm();
+  const {open, handleToggleActive, handleClose, loading, toggleLoading} = useCustomerForm();
 
 
 
@@ -44,18 +44,23 @@ export const CustomerDialog = () => {
 
           {/* Footer */}
           <div className="border-t px-6 py-4 flex justify-center gap-2">
-            <Button form="customer-form" type="submit" className="text-foreground cursor-pointer">
-              <Save />
-              Guardar
+            <Button disabled={loading || toggleLoading} form="customer-form" type="submit" className="text-foreground cursor-pointer">
+               {loading 
+               ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> 
+               : <span><Save className="h-4 w-4 mr-2" /> Guardar</span>}
             </Button>
             {selected && (
               <Button
+                disabled={loading || toggleLoading}
                 className="cursor-pointer"
                 type="button"
                 variant={selected.active ? "destructive" : "secondary"}
                 onClick={handleToggleActive}
               >
-                {selected.active ? "Deshabilitar" : "Habilitar"}
+                { toggleLoading
+                 ? <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                 : (selected.active ? "Deshabilitar" : "Habilitar")
+                }
               </Button>
             )}
             <Button variant="outline" type="button" onClick={handleClose} className="cursor-pointer">

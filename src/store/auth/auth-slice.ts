@@ -40,6 +40,7 @@ export const signOutUser = createAsyncThunk(
     'auth/signOut',
     async (_, { rejectWithValue }) => {
         try {
+            console.log('signOutUser thunk called')
             await authService.signOut()
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'An unknown error occurred'

@@ -5,29 +5,29 @@ import { Badge } from "@/components/";
 
 export const salesColumns: ColumnDef<Sale>[] = [
   {
-    accessorKey: "_id",
+    accessorKey: "id",
     header: "ID",
   },
-  {
-    accessorKey: "date",
-    header: "Fecha",
-    cell: ({ row }) => {
-      const date = row.original.date;
-      return date && !isNaN(Number(date))
-        ? format(new Date(Number(date)), "dd/MM/yyyy")
-        : "-";
-    },
+{
+  accessorKey: "date",
+  header: "Fecha",
+  cell: ({ row }) => {
+    const date = row.original.date;
+    return date
+      ? format(new Date(date), "dd/MM/yyyy")
+      : "-";
   },
-  {
-    accessorKey: "sendDate",
-    header: "Fecha Envío",
-    cell: ({ row }) => {
-      const date = row.original.sendDate;
-      return date && !isNaN(Number(date))
-        ? format(new Date(Number(date)), "dd/MM/yyyy")
-        : "-";
-    },
+},
+{
+  accessorKey: "sendDate",
+  header: "Fecha Envío",
+  cell: ({ row }) => {
+    const date = row.original.sendDate;
+    return date
+      ? format(new Date(date), "dd/MM/yyyy")
+      : "-";
   },
+},
   {
     accessorKey: "customer.name",
     header: "Cliente",

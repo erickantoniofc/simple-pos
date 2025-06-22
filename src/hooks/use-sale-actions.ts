@@ -19,6 +19,7 @@ import { cancelSaleThunk, saveSaleThunk, sendSaleThunk } from "@/store/pos/sale-
 export const useSaleActions = () => {
   const dispatch: AppDispatch = useDispatch();
   const sale = useSelector((state: RootState) => state.sales.activeSale);
+  const {saveLoading} = useSelector((state: RootState) => state.sales);
   const sales = useSelector((state: RootState) => state.sales.sales);
   const navigate = useNavigate();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
@@ -69,7 +70,7 @@ export const useSaleActions = () => {
     }
 
     try {
-      await dispatch(saveSaleThunk(sale)).unwrap();
+      const saved = await dispatch(saveSaleThunk(sale)).unwrap();
       toast.success("Venta guardada correctamente.");
     } catch (err) {
       toast.error(typeof err === "string" ? err : "Error al guardar la venta.");
@@ -97,7 +98,7 @@ export const useSaleActions = () => {
 
   const checkUnsavedChanges = useCallback(() => {
     if (!sale) return false;
-    const original = sales.find((s) => s._id === sale._id);
+    const original = sales.find((s) => s.id === sale.id);
     if (!original) return true;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -141,6 +142,7 @@ export const useSaleActions = () => {
     onCancelSaleAction,
     sale,
     sales,
-    handleCloseSaleSummary
+    handleCloseSaleSummary,
+    saveLoading
   };
 };

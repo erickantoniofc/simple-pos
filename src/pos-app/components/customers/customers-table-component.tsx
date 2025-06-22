@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "@/store/store"
+
 import { cn } from "@/lib/utils"
-import { setActiveCustomer } from "@/store/pos/customer-slice"
+
 
 import type { Customer } from "@/data/types/customer"
 
@@ -53,7 +51,7 @@ export const CustomersTableComponent = ({customers} : {customers: Customer[]}) =
           rowClassName={(customer) =>
           cn(
             !customer.active && "opacity-50 bg-muted",
-            selected?._id === customer._id && "bg-primary/10 border-l-4 border-primary"
+            selected?.id === customer.id && "bg-primary/10 border-l-4 border-primary"
           )}
         />
       </ScrollArea>

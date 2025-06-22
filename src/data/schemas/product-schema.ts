@@ -5,9 +5,12 @@ export const productSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   price: z.preprocess(
     (val) => val === "" ? undefined : Number(val),
-    z.number()
+    z.number({
+      required_error: "El precio es requerido",
+      invalid_type_error: "El precio debe ser un número",
+    })
       .nonnegative("El precio no puede ser negativo")
-      .refine((val) => Number((val).toFixed(2)) === val, {
+      .refine((val) => Number(val.toFixed(2)) === val, {
         message: "El precio debe tener como máximo 2 decimales",
       })
   ),

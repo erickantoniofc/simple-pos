@@ -4,11 +4,12 @@ import type { RootState } from "@/store/store";
 
 import { ProductForm } from "@/pos-app/components/products/product-form";
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ScrollArea } from "@/components";
-import { Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import { useProductForm } from "@/hooks/use-product-form";
 
+
 export const ProductDialog = () => {
-    const selected = useSelector((state: RootState) => state.products.selectedProduct);
+    const {selectedProduct: selected, loading, toggleLoading} = useSelector((state: RootState) => state.products);
     const {handleClose, handleToggleActive, open} = useProductForm();
 
     return (
@@ -36,21 +37,38 @@ export const ProductDialog = () => {
 
           {/* Footer */}
           <div className="border-t px-6 py-4 flex justify-center gap-2">
-            <Button form="product-form" type="submit" className="text-foreground cursor-pointer">
-              <Save />
-              Guardar
+            <Button disabled={loading || toggleLoading} form="product-form" type="submit" className="text-foreground cursor-pointer">
+              {loading ? (
+                <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                </span>
+              ) : (
+                <>
+                  <Save />
+                  Guardar
+                </>
+              )}
             </Button>
             {selected && (
               <Button
+                disabled={loading || toggleLoading}
                 type="button"
                 variant={selected.active ? "destructive" : "secondary"}
                 onClick={handleToggleActive}
                 className="cursor-pointer"
               >
-                {selected.active ? "Deshabilitar" : "Habilitar"}
+                {
+                  toggleLoading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    </span>
+                  )
+                  :
+                  (selected.active ? "Deshabilitar" : "Habilitar")
+                }
               </Button>
             )}
-            <Button variant="outline" type="button" onClick={handleClose} className="cursor-pointer">
+            <Button disabled={loading || toggleLoading} variant="outline" type="button" onClick={handleClose} className="cursor-pointer">
               Cancelar
             </Button>
           </div>

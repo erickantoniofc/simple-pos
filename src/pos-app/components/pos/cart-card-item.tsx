@@ -20,7 +20,7 @@ export const CartCardItem = ({
 
   return (
     <div
-      key={item.product._id}
+      key={item.product.id}
       className="flex items-center gap-2 border-b pb-2"
     >
       {showImage ? (
@@ -43,7 +43,7 @@ export const CartCardItem = ({
         <Button
           onClick={() =>
             handleQuantityChange(
-              item.product._id,
+              item.product.id,
               item.quantity > 1 ? item.quantity - 1 : 1
             )
           }
@@ -59,10 +59,10 @@ export const CartCardItem = ({
           value={item.quantity}
           type="number"
           min={1}
-          onChange={(event) => onInputChange(event, item.product._id)}
+          onChange={(event) => onInputChange(event, item.product.id)}
         />
         <Button
-          onClick={() => handleQuantityChange(item.product._id, item.quantity + 1)}
+          onClick={() => handleQuantityChange(item.product.id, item.quantity + 1)}
           size="icon"
           variant="outline"
           className="cursor-pointer"
@@ -80,7 +80,7 @@ export const CartCardItem = ({
             step="0.01"
             value={item.price}
             onChange={(e) => {
-              updatePrice(item.product._id, e);
+              updatePrice(item.product.id, e);
             }}
           />
         </div>
@@ -91,7 +91,7 @@ export const CartCardItem = ({
           ${(item.price * item.quantity).toFixed(2)}
         </span>
         <Button
-          onClick={() => onRemoveItem(item.product._id)}
+          onClick={() => onRemoveItem(item.product.id)}
           size="icon"
           variant="ghost"
           className="text-destructive cursor-pointer"

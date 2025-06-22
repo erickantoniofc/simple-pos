@@ -3,8 +3,9 @@ import { type Category } from "@/data/types/category"; // ajusta el path si es n
 
 export const categoryColumns: ColumnDef<Category>[] = [
   {
-    accessorKey: "_id",
+    accessorKey: "id",
     header: "ID",
+    size: 50,
   },
   {
     accessorKey: "name",

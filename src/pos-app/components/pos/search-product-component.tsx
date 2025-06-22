@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { 
     Input,
@@ -6,6 +6,7 @@ import {
 } from "@/components/";
 import { Plus } from "lucide-react";
 import { setActiveProduct } from "@/store/pos/product-slice";
+import type { RootState } from "@/store/store";
 
 
 
@@ -16,6 +17,9 @@ export const SearchProductComponent = (
     ) => {
     const dispatch = useDispatch();
     
+     const canCrudProducts = useSelector(
+        (state: RootState) => state.auth.profile?.permissions?.canCrudProducts
+      );
     
   return (
     <div className="space-y-4">
@@ -28,6 +32,7 @@ export const SearchProductComponent = (
             />
             <Button 
                 className="whitespace-nowrap h-12 text-white cursor-pointer"
+                disabled={!canCrudProducts}
                 onClick={() => dispatch(setActiveProduct(null)) }
                 >
                 <Plus/> Agregar producto

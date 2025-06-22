@@ -2,11 +2,11 @@ import { type ColumnDef } from "@tanstack/react-table"
 import type { Product } from "@/data/types/product"
 import { mockCategories } from "@/data/mocks/categories";
 
-const categoryMap = new Map(mockCategories.map(c => [c._id, c.name]));
+const categoryMap = new Map(mockCategories.map(c => [c.id, c.name]));
 
 export const productColumns: ColumnDef<Product>[] = [
   {
-    accessorKey: "_id",
+    accessorKey: "id",
     header: "ID",
     size: 50,
  },

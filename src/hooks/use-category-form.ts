@@ -1,87 +1,94 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "@/data/schemas/category-schema";
 import type { Category } from "@/data/types/category";
-import { addCategory, setActiveCategory, toggleCategoryActive, updateCategory } from "@/store/pos/category-slice";
-
-import { toast } from "sonner";
+import { setActiveCategory, clearCategoryErrors } from "@/store/pos/category-slice";
 import { saveCategoryThunk, toggleCategoryActiveThunk } from "@/store/pos/category-thunk";
-import type { AppDispatch } from "@/store/store";
+import type { AppDispatch, RootState } from "@/store/store";
+import { toast } from "sonner";
 
 export type CategoryFormInput = z.input<typeof categorySchema>;
-//export type CategoryFormValues = z.infer<typeof categorySchema>;
 
 export const useCategoryForm = (selected: Category | null | undefined) => {
-  
-    const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, toggleLoading, error } = useSelector((state: RootState) => state.categories);
 
-    
-      // Initialize react-hook-form with schema-based validation and default values
-      const form = useForm<CategoryFormInput>({
-        resolver: zodResolver(categorySchema),
-        defaultValues: {
-          name: "",
-          description: ""
-        },
-      });
+  const form = useForm<CategoryFormInput>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: {
+      name: "",
+      description: ""
+    },
+  });
 
-      /**
-         * Populate form when a category is selected,
-         * or reset it to blank when creating a new one.
-         */
-        useEffect(() => {
-          if (selected) {
-            form.reset({
-              ...selected,
-            });
-          } else {
-            form.reset();
-          }
-        }, [selected]);
+  useEffect(() => {
+    if (selected) {
+      form.reset({ ...selected });
+    } else {
+      form.reset();
+    }
+  }, [selected]);
 
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
 
-        const open = selected !== undefined;
+  const open = selected !== undefined;
 
-        const handleClose = () => dispatch(setActiveCategory(undefined));
+  const handleClose = () => {
+    dispatch(clearCategoryErrors());
+    dispatch(setActiveCategory(undefined));
+  };
 
-       const handleToggleActive = async () => {
-          if (!selected?._id) return;
+  const handleToggleActive = async () => {
+    if (!selected?.id) return;
 
-          const action = selected.active ? "deshabilitar" : "habilitar";
-          const actionPast = selected.active ? "deshabilitado" : "habilitado";
+    const action = selected.active ? "deshabilitar" : "habilitar";
+    const actionPast = selected.active ? "deshabilitado" : "habilitado";
 
-          try {
-            await dispatch(toggleCategoryActiveThunk(selected._id)).unwrap();
-            toast.success(`El producto ha sido ${actionPast} exitosamente`);
-            handleClose();
-          } catch (err) {
-            toast.error(`Error al ${action} el producto`);
-          }
-        };
-      
-         /**
-         * Submit handler that dispatches create or update actions based on selection.
-         */
-        const onSubmit = async(data: CategoryFormInput) => {
-            try {
-            const base = {
-              ...selected,
-              ...data,
-              active: true
-            };
+    try {
+      await dispatch(toggleCategoryActiveThunk(selected.id)).unwrap();
+      toast.success(`La categoría ha sido ${actionPast} exitosamente`);
+      handleClose();
+    } catch (err) {
+      toast.error(`Error al ${action} la categoría`);
+    }
+    finally {
+      dispatch(clearCategoryErrors());
+    }
+  };
 
-            const result = await dispatch(saveCategoryThunk(base)).unwrap();
+  const onSubmit = async (data: CategoryFormInput) => {
+    try {
+      const base: Category = {
+        ...selected,
+        ...data,
+        active: true,
+      };
 
-            toast.success(selected ? "Categoría modificada exitosamente" : "Categoría creada exitosamente");
-            dispatch(setActiveCategory(undefined));
-          } catch (error) {
-            toast.error("Hubo un error al guardar la categoría");
-          }
-        };
+      await dispatch(saveCategoryThunk(base)).unwrap();
 
-    return {form, selected, onSubmit, handleToggleActive, handleClose, open}
-    
-}
+      toast.success(selected ? "Categoría modificada exitosamente" : "Categoría creada exitosamente");
+      dispatch(setActiveCategory(undefined));
+    } catch (error) {
+      toast.error("Hubo un error al guardar la categoría");
+    }
+    finally {
+      dispatch(clearCategoryErrors());
+    }
+  };
+
+  return {
+    form,
+    selected,
+    open,
+    loading,
+    toggleLoading,
+    onSubmit,
+    handleToggleActive,
+    handleClose,
+  };
+};

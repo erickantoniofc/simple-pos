@@ -71,8 +71,8 @@ export const SaleSummaryDialog = ({
         <div className="flex flex-col flex-1 overflow-hidden space-y-4 h-full">
           {/* Información de cabecera */}
           <div className="text-sm text-muted-foreground shrink-0">
-            <p><strong>ID:</strong> {sale?._id}</p>
-            <p><strong>Fecha:</strong> {sale?.date ? format(new Date(Number(sale.date)), "dd/MM/yyyy HH:mm") : "-"}</p>
+            <p><strong>ID:</strong> {sale?.id}</p>
+            <p><strong>Fecha:</strong>{sale?.date ? format(new Date(sale.date), "dd/MM/yyyy HH:mm") : "-"}</p>
             <p><strong>Cliente:</strong> {sale?.customer?.name || "-"}</p>
             <p><strong>Documento:</strong> {isFactura ? "Factura Electrónica" : "Crédito Fiscal"}</p>
             {isCancelled && (
@@ -87,7 +87,7 @@ export const SaleSummaryDialog = ({
             <ScrollArea className="h-full">
               <div className="space-y-2 pr-2">
                 {sale?.saleItems.map((item) => (
-                  <div key={item.product._id} className="flex items-center justify-between text-sm">
+                  <div key={item.product.id} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-3 min-w-0">
                       {item.product.imageUrl ? (
                         <img
@@ -152,7 +152,7 @@ export const SaleSummaryDialog = ({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => sale?._id && onCancel(sale._id)}>Confirmar</AlertDialogAction>
+                    <AlertDialogAction onClick={() => sale?.id && onCancel(sale.id)}>Confirmar</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

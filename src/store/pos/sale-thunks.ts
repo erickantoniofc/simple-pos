@@ -2,10 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import type { RootState } from "@/store/store";
 import { DocumentStatus, DocumentType, type Sale } from "@/data/types/sale";
-import { addSale, updateSale, resetActiveSale, updateActiveSale, cancelSaleById } from "@/store/pos/sale-slice";
+import { addSale, resetActiveSale, cancelSaleById } from "@/store/pos/sale-slice";
 import { saleToFe } from "@/helpers/sale-to-fe";
 import { dteService } from "@/services/dte.service";
-import { v4 as uuidv4 } from "uuid";
+import { createSale, getAllSales, updateSale } from "@/services/sale.service";
 
 export const sendSaleThunk = createAsyncThunk<
   Sale,
@@ -13,19 +13,19 @@ export const sendSaleThunk = createAsyncThunk<
   { state: RootState }
 >("sales/send", async (sale, { getState, dispatch, rejectWithValue }) => {
   try {
+    console.log('Sale thunk')
     const state = getState();
     const activePos = state.branches.activePos;
     const activeBranch = state.branches.activeBranch;
     const company = state.company.company;
-    const isNew = !sale?._id;
+    const isNew = !sale?.id;
 
     if (!sale) return rejectWithValue("No hay venta activa");
 
 
-    const now = Date.now().toString();
+    const now = new Date().toISOString();
     const saleToSend: Sale = {
       ...sale,
-      _id: sale._id ?? uuidv4(),
       status: DocumentStatus.SEND,
       sendDate: now,
       date: sale.date ?? now,
@@ -34,14 +34,14 @@ export const sendSaleThunk = createAsyncThunk<
 
     if (sale.documentType === DocumentType.FE) {
       const dte = saleToFe(saleToSend, activeBranch, activePos, "000000000000001", company);
-
+      console.log(dte)
       const validationErrors = dteService.validateDTE(dte);
       if (validationErrors.length > 0) {
         return rejectWithValue(`DTE validation failed: ${validationErrors.join(', ')}`);
       }
 
       const signResult = await dteService.signDTE(dte);
-
+      
       if (!signResult.success) {
         return rejectWithValue(`Failed to sign DTE: ${signResult.error}`);
       }
@@ -52,44 +52,51 @@ export const sendSaleThunk = createAsyncThunk<
     if (isNew) {
       dispatch(addSale(saleToSend));
     } else {
-      dispatch(updateSale(saleToSend));
+      await updateSale(saleToSend);
     }
 
     dispatch(resetActiveSale());
     return saleToSend;
-  } catch {
+  } catch(error) {
+    console.log("Error al enviar la venta:", error);
     return rejectWithValue("Ocurrió un error inesperado al enviar la venta");
   }
 });
 
 export const saveSaleThunk = createAsyncThunk<
-  Sale,                      // valor de retorno
-  Sale,                      // argumento (ya validado)
+  Sale,   // lo que retorna
+  Sale,   // lo que recibe
   { state: RootState }
->("sales/save", async (sale, { getState, dispatch }) => {
+>("sales/save", async (sale, { getState, rejectWithValue }) => {
   const state = getState();
   const activePos = state.branches.activePos;
-  const isNew = !sale._id;
-  const now = Date.now().toString();
+  const isNew = !sale.id;
+  const now = new Date().toISOString();
+  const posId = sale.posId?.trim() || activePos?.id?.trim();
+
+  if (!posId) {
+    return rejectWithValue("Debe seleccionar un punto de venta válido");
+  }
 
   const saleToSave: Sale = {
     ...sale,
-    _id: sale._id ?? uuidv4(),
     status: DocumentStatus.SAVE,
-    posId: sale.posId ?? activePos.id,
+    posId,
     date: sale.date ?? now,
   };
 
-  if (isNew) {
-    dispatch(addSale(saleToSave));
-  } else {
-    dispatch(updateSale(saleToSave));
+console.log("Saving sale:", saleToSave);
+  try {
+    const result = isNew
+      ? await createSale(saleToSave)
+      : await updateSale(saleToSave);
+
+    return result;
+  } catch (err: any) {
+    return rejectWithValue(err.message ?? "Error al guardar la venta");
   }
-
-  dispatch(updateActiveSale(saleToSave));
-
-  return saleToSave;
 });
+
 
 export const cancelSaleThunk = createAsyncThunk<
   string, // id de la venta cancelada
@@ -100,3 +107,14 @@ export const cancelSaleThunk = createAsyncThunk<
   dispatch(cancelSaleById(saleId));
   return saleId;
 });
+
+export const getAllSalesThunk = createAsyncThunk<Sale[]>(
+  "sales/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getAllSales();
+    } catch (err: any) {
+      return rejectWithValue(err.message || "Error al cargar las ventas");
+    }
+  }
+);

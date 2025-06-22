@@ -1,12 +1,12 @@
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ScrollArea } from "@/components";
-import { Save } from "lucide-react";
+import { Loader2, Save } from "lucide-react";
 import type { Category } from "@/data/types/category";
 import { useCategoryForm } from "@/hooks/use-category-form";
 import { CategoryForm } from "./category-form";
 
 export const CategoryDialog = ({activeCategory} : {activeCategory: Category | null | undefined}) => {
     const selected = activeCategory;
-    const {handleClose, handleToggleActive, open, form, onSubmit} = useCategoryForm(activeCategory);
+    const {handleClose, handleToggleActive, open, form, onSubmit, loading, toggleLoading} = useCategoryForm(activeCategory);
 
     return (
     <Dialog open={open} onOpenChange={(open)=> !open && handleClose()}>
@@ -33,24 +33,45 @@ export const CategoryDialog = ({activeCategory} : {activeCategory: Category | nu
 
           {/* Footer */}
           <div className="border-t px-6 py-4 flex justify-center gap-2">
-            <Button form="category-form" type="submit" className="text-foreground cursor-pointer">
-              <Save />
+            <Button
+              form="category-form"
+              type="submit"
+              disabled={loading}
+              className="text-foreground cursor-pointer"
+            >
+              {loading ? (
+                <Loader2 className="animate-spin h-4 w-4 mr-2" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
               Guardar
             </Button>
-            {selected && (
+
+              {selected && (
+                <Button
+                  type="button"
+                  variant={selected.active ? "destructive" : "secondary"}
+                  disabled={toggleLoading}
+                  onClick={handleToggleActive}
+                  className="cursor-pointer"
+                >
+                  {toggleLoading ? (
+                    <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                  ) : null}
+                  {selected.active ? "Deshabilitar" : "Habilitar"}
+                </Button>
+              )}
+
               <Button
+                variant="outline"
                 type="button"
-                variant={selected.active ? "destructive" : "secondary"}
-                onClick={handleToggleActive}
+                onClick={handleClose}
                 className="cursor-pointer"
+                disabled={loading || toggleLoading}
               >
-                {selected.active ? "Deshabilitar" : "Habilitar"}
+                Cancelar
               </Button>
-            )}
-            <Button variant="outline" type="button" onClick={handleClose} className="cursor-pointer">
-              Cancelar
-            </Button>
-          </div>
+            </div>
         </div>  
 
         </DialogContent>

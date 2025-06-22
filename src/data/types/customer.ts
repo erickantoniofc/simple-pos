@@ -1,5 +1,5 @@
 export interface Customer {
-    _id: string;
+    id?: string;
     name: string;
     email?: string;
     phone?: string; 
@@ -10,7 +10,7 @@ export interface Customer {
     nit?: string;
     nrc?: string;
     activity?: number;
-    sendMethod? : number; // 1: email, 2: whatsapp, 3: both
+    sendMethod? : number; 
     active: boolean;
 }
 

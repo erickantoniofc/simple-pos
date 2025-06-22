@@ -9,7 +9,7 @@ import {
   AlertDialogFooter, 
   AlertDialogHeader, 
   AlertDialogTitle  } from "@/components/";
-import { Save, Send, Plus } from "lucide-react";
+import { Save, Send, Plus, Loader2 } from "lucide-react";
 import { DocumentStatus, type Sale } from "@/data/types/sale";
 import { PaymentMethodComponent } from "./payment-method-component";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
     showDiscardDialog,
     setShowDiscardDialog,
     confirmDiscard,
+    saveLoading
   } = useSaleActions();
 
   const [sentSale, setSentSale] = useState<Sale | null>(null);
@@ -33,6 +34,7 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
   const handleSendClick = async () => {
     const result = await handleSend(); 
     if (result) {
+      console.log(result);
       setSentSale(result);
       setShowSummary(true);
     }
@@ -47,11 +49,15 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             <PaymentMethodComponent />
           </div>
 
-          <Button onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
-            <Save className="h-4 w-4 mr-1" />
+          <Button disabled={saveLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
+            {saveLoading ? (
+              <Loader2 className="animate-spin h-4 w-4 mr-1" />
+            ) : (
+              <Save className="h-4 w-4 mr-1" />
+            )}
           </Button>
 
-          <Button onClick={handleSendClick} className="col-span-6 h-10 text-accent-foreground cursor-pointer">
+          <Button disabled={saveLoading} onClick={handleSendClick} className="col-span-6 h-10 text-accent-foreground cursor-pointer">
             <Send className="h-4 w-4 mr-1" />
             Enviar DTE
           </Button>
@@ -64,11 +70,15 @@ export const ActionButtonsComponent = ({ status }: { status: number }) => {
             <PaymentMethodComponent />
           </div>
 
-          <Button onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
-            <Save className="h-4 w-4 mr-1" />
+          <Button disabled={saveLoading} onClick={handleSave} className="col-span-2 h-10 text-accent-foreground cursor-pointer">
+            {saveLoading ? (
+              <Loader2 className="animate-spin h-4 w-4 mr-1" />
+            ) : (
+              <Save className="h-4 w-4 mr-1" />
+            )}
           </Button>
 
-          <Button onClick={handleSendClick} className="col-span-4 h-10 text-accent-foreground cursor-pointer">
+          <Button disabled={saveLoading} onClick={handleSendClick} className="col-span-4 h-10 text-accent-foreground cursor-pointer">
             <Send className="h-4 w-4 mr-1" />
             Enviar DTE
           </Button>

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 
 import { customerSchema } from "@/data/schemas/customer-schema";
 import type { z } from "zod";
@@ -10,8 +9,8 @@ import { type AppDispatch, type RootState } from "@/store/store";
 
 import {
   setActiveCustomer,
-  toggleCustomerActive,
   setSelectCreatedCustomerInSale,
+  clearAllCustomerErrors,
 } from "@/store/pos/customer-slice";
 import { toast } from "sonner";
 
@@ -19,7 +18,6 @@ import { toast } from "sonner";
 import { formatDui, formatNit, formatNrc } from "@/helpers";
 import type { Customer } from "@/data/types/customer";
 import { saveCustomerThunk, toggleCustomerActiveThunk } from "@/store/pos/customer-thunk";
-
 export type CustomerFormValues = z.infer<typeof customerSchema>;
 
 /**
@@ -29,7 +27,7 @@ export type CustomerFormValues = z.infer<typeof customerSchema>;
  */
 export const useCustomerForm = () => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const {loading, toggleLoading} = useSelector((state: RootState) => state.customers);
   // Get the currently selected customer from Redux state
   const selected = useSelector(
     (state: RootState) => state.customers.selectedCustomer
@@ -84,18 +82,21 @@ export const useCustomerForm = () => {
     const handleClose = () => dispatch(setActiveCustomer(undefined));
 
     const handleToggleActive = async() => {
-       if (!selected?._id) return;
+       if (!selected?.id) return;
 
       const action = selected.active ? "deshabilitar" : "habilitar";
       const actionPast = selected.active ? "deshabilitado" : "habilitado";
 
       try {
-        await dispatch(toggleCustomerActiveThunk(selected._id)).unwrap();
+        await dispatch(toggleCustomerActiveThunk(selected.id)).unwrap();
         toast.success(`El cliente ha sido ${actionPast} exitosamente`);
         handleClose();
       } catch (error) {
         toast.error(`Error al ${action} el cliente`);
         console.error(error);
+      }
+      finally {
+        dispatch(clearAllCustomerErrors());
       }
     };
 
@@ -124,7 +125,6 @@ export const useCustomerForm = () => {
       ...data,
       sendMethod: getSendMethodValue(data.sendMethod),
       activity: data.activity ? Number(data.activity) : undefined,
-      _id: selected?._id || uuidv4(),
       active: true,
     };
 
@@ -136,6 +136,9 @@ export const useCustomerForm = () => {
     dispatch(setActiveCustomer(undefined)); // close dialog after saving
   } catch (error) {
     toast.error("Hubo un error al guardar el cliente");
+    console.log('Error saving customer:', error);
+  } finally {
+    dispatch(clearAllCustomerErrors());
   }
   };
 
@@ -149,6 +152,8 @@ export const useCustomerForm = () => {
     formatNrc,
     open,
     handleToggleActive,
-    handleClose
+    handleClose,
+    loading,
+    toggleLoading
   };
 };

@@ -54,7 +54,7 @@ export const ProductsTableComponent = ({products} : {products: Product[]}) => {
           rowClassName={(product) =>
           cn(
             !product.active && "opacity-50 bg-muted",
-            selected?._id === product._id && "bg-primary/10 border-l-4 border-primary"
+            selected?.id === product.id && "bg-primary/10 border-l-4 border-primary"
           )}
         />
       </ScrollArea>

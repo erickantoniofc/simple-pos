@@ -2,7 +2,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, Input }
 import { useProductForm } from "@/hooks/use-product-form"
 import { cn } from "@/lib/utils"; 
 
-import { mockCategories } from "@/data/mocks/categories";
+
 
 import {
 
@@ -16,10 +16,13 @@ import {
   Button
 } from "@/components";
 import { Check, ChevronsUpDown } from "lucide-react";
+import type { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 export const ProductForm = () => {
 
     const {form, onSubmit, previewUrl, onFileSelect} = useProductForm();
+    const categories = useSelector((state: RootState) => state.categories.categories);
 
   return (
     <Form {...form}>
@@ -123,7 +126,7 @@ export const ProductForm = () => {
                         className={cn("w-full justify-between", !field.value && "text-muted-foreground")}
                         >
                         {field.value
-                            ? mockCategories.find(cat => cat._id === field.value)?.name
+                            ? categories.find(cat => cat.id === field.value)?.name
                             : "Selecciona una categoría"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -133,12 +136,12 @@ export const ProductForm = () => {
                     <Command>
                         <CommandInput placeholder="Buscar categoría..." className="h-9" />
                         <CommandList>
-                        {mockCategories.map(cat => (
+                        {categories.map(cat => (
                             <CommandItem
-                            key={cat._id}
+                            key={cat.id}
                             value={cat.name}
                             onSelect={() => {
-                                form.setValue("category", cat._id ?? "", 
+                                form.setValue("category", cat.id ?? "", 
                                 { shouldValidate: true, 
                                   shouldTouch: true,
                                   shouldDirty: true, });
@@ -148,7 +151,7 @@ export const ProductForm = () => {
                             <Check
                                 className={cn(
                                 "mr-2 h-4 w-4",
-                                cat._id === field.value ? "opacity-100" : "opacity-0"
+                                cat.id === field.value ? "opacity-100" : "opacity-0"
                                 )}
                             />
                             {cat.name}

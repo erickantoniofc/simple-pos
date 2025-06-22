@@ -1,18 +1,20 @@
-import { branches } from '@/data/mocks/branches';
 import type { Branch, PosPoint } from '@/data/types/branch';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { fetchBranches } from './branch-thunk';
 
 
 interface BranchState {
     branches: Branch[],
     activeBranch: Branch,
-    activePos: PosPoint
+    activePos: PosPoint,
+    loading?: boolean
 }
 
 const initialState: BranchState = {
-    branches: branches,
-    activeBranch: branches[0],
-    activePos: branches[0].posPoints[0]
+    branches: [],
+    activeBranch: {} as Branch,
+    activePos: {} as PosPoint,
+    loading: false
 }
 
 export const branchSlice = createSlice({
@@ -109,9 +111,25 @@ export const branchSlice = createSlice({
         }   
         
     },
+    extraReducers: (builder) => {
+    builder
+        .addCase(fetchBranches.pending, (state) => {
+        state.loading = true;
+        })
+        .addCase(fetchBranches.fulfilled, (state, action) => {
+        state.loading = false;
+        state.branches = action.payload;
+        state.activeBranch = action.payload[0];
+        state.activePos = action.payload[0]?.posPoints?.[0];
+        })
+        .addCase(fetchBranches.rejected, (state) => {
+        state.loading = false;
+        });
+    },
+}
     
     
-});
+);
 
 export const {setActiveBranch, setActivePos, updateBranch, updatePosPoint} = branchSlice.actions;
 export default branchSlice.reducer;

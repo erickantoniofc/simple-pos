@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { addProduct, setActiveProduct, toggleProductActive, updateProduct } from "@/store/pos/product-slice";
+import { clearAllErrors, setActiveProduct, setLoading, } from "@/store/pos/product-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
 
@@ -9,7 +9,8 @@ import { productSchema } from "@/data/schemas/product-schema";
 import type { AppDispatch, RootState } from "@/store/store";
 import type { z } from "zod";
 import { toast } from "sonner";
-import { saveProductThunk, toggleProductActiveThunk } from "@/store/pos/product-thunk";
+import { createProductThunk, toggleProductActiveThunk, updateProductThunk } from "@/store/pos/product-thunk";
+import { uploadImageToSupabase } from "@/helpers/images-handler";
 
 export type ProductFormInput = z.input<typeof productSchema>;
 export type ProductFormValues = z.infer<typeof productSchema>;
@@ -64,39 +65,65 @@ export const useProductForm = () => {
         const handleClose = () => dispatch(setActiveProduct(undefined));
 
         const handleToggleActive = async () => {
-          if (!selected?._id) return;
-          const action = selected.active ? "deshabilitar" : "habilitar";
-          const actionPast = selected.active ? "deshabilitado" : "habilitado";
+        if (!selected?.id) return;
 
-          try {
-            await dispatch(toggleProductActiveThunk(selected._id)).unwrap();
-            toast.success(`El producto ha sido ${actionPast} exitosamente`);
-            handleClose();
-          } catch (err) {
-            toast.error(`Error al ${action} el producto`);
-          }
-        };
+        const action = selected.active ? "deshabilitar" : "habilitar";
+        const actionPast = selected.active ? "deshabilitado" : "habilitado";
+
+        try {
+          await dispatch(toggleProductActiveThunk(selected.id)).unwrap();
+
+          toast.success(`El producto ha sido ${actionPast} exitosamente`);
+          
+          dispatch(setActiveProduct(undefined));
+
+        } catch (err) {
+          toast.error(`Error al ${action} el producto`);
+        }
+        finally {
+          dispatch(clearAllErrors());
+        }
+      };
       
          /**
          * Submit handler that dispatches create or update actions based on selection.
          */
         const onSubmit = async (data: ProductFormValues) => {
-          try {
-            const product = {
-              ...selected,
-              ...data,
-              price: Number(Number(data.price).toFixed(2)),
-              active: true,
-              _id: selected?._id ?? uuidv4(),
-            };
+        try {
+          dispatch(setLoading(true));
+          
+          let imageUrl = data.imageUrl;
 
-            await dispatch(saveProductThunk(product)).unwrap();
-            toast.success(selected ? "Producto modificado exitosamente" : "Producto creado exitosamente");
-            dispatch(setActiveProduct(undefined));
-          } catch (err) {
-            toast.error("Hubo un error al guardar el producto");
+          if (imageFile) {
+            const fileName = `${selected?.imageUrl ?? uuidv4()}.jpg`;
+            imageUrl = await uploadImageToSupabase(imageFile, fileName);
           }
-        };
+
+
+          const product = {
+            ...selected,
+            ...data,
+            imageUrl,
+            price: Number(Number(data.price).toFixed(2)),
+            active: true,
+          };;
+
+          if (selected) {
+            await dispatch(updateProductThunk({ ...product })).unwrap();
+            toast.success("Producto modificado exitosamente");
+          } else {
+            await dispatch(createProductThunk(product)).unwrap();
+            toast.success("Producto creado exitosamente");
+          }
+          dispatch(setActiveProduct(undefined));
+        } catch (err) {
+          toast.error("Hubo un error al guardar el producto");
+        }
+        finally {
+          dispatch(setLoading(false)); 
+          dispatch(clearAllErrors());
+        }
+      };
     return {form, selected, onSubmit, imageFile, previewUrl, onFileSelect, handleToggleActive, handleClose, open}
     
 }

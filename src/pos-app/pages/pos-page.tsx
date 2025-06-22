@@ -6,6 +6,7 @@ import type { RootState } from "@/store/store";
 
 import { CartCard, PosContainer } from "@/pos-app/components/pos";
 import { DocumentStatus } from "@/data/types/sale";
+import { Loader2 } from "lucide-react";
 
 
 
@@ -25,7 +26,29 @@ export const PosPage = () => {
     }
   
   }, [activeSale, dispatch])
-  
+
+  const { branches, loading } = useSelector((state: RootState) => state.branches);
+  const {listLoading: productsLoading} = useSelector((state: RootState) => state.products);
+
+  if (loading || productsLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader2 className="animate-spin size-6 text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (branches.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-center px-4">
+        <div className="text-sm text-muted-foreground">
+          No tienes acceso a ningún punto de venta habilitado. <br />
+          Contacta con un administrador para solicitar permisos.
+        </div>
+      </div>
+    );
+  }
+    
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 px-4 pb-5 box-border">

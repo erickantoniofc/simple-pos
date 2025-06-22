@@ -1,32 +1,32 @@
+import imageCompression from "browser-image-compression";
+import { supabase } from "@/lib/supabase";
 
-
-import imageCompression from 'browser-image-compression';
-
-export const uploadToCloudinary = async (file: File) => {
-
-    const cloudName = 'dry5a999y';
-    const preset = 'react-journal';
-
-    // Compression options
+export const uploadImageToSupabase = async (file: File, path: string) => {
+  // Comprime la imagen
   const compressed = await imageCompression(file, {
     maxSizeMB: 0.1, // 100 KB
     maxWidthOrHeight: 100,
     useWebWorker: true,
   });
 
+  const session = await supabase.auth.getSession();
+  console.log("👤 session:", session);
+  // Sube a Supabase
+  const { data, error } = await supabase.storage
+    .from("product-images")
+    .upload(path, compressed, {
+      cacheControl: "3600",
+      upsert: true,
+    });
 
-  const formData = new FormData();
-  formData.append('file', compressed);
-  formData.append('upload_preset', preset); 
+    console.log({ data, error });
 
-  // Cloudinary API endpoint for image upload
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: 'POST',
-    body: formData,
-  });
 
-   if (!res.ok) throw new Error("Error al subir imagen");
-  
-  const data = await res.json();
-  return data.secure_url as string;
+  if (error) throw error;
+
+  const { data: publicUrlData } = supabase.storage
+    .from("product-images")
+    .getPublicUrl(data.path);
+
+  return publicUrlData.publicUrl;
 };

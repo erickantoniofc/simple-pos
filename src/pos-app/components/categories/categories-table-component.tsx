@@ -44,7 +44,7 @@ export const CategoriesTableComponent = ({categories} : {categories: Category[]}
           rowClassName={(category) =>
           cn(
             !category.active && "opacity-50 bg-muted",
-            selected?._id === category._id && "bg-primary/10 border-l-4 border-primary"
+            selected?.id === category.id && "bg-primary/10 border-l-4 border-primary"
           )}
         />
       </ScrollArea>

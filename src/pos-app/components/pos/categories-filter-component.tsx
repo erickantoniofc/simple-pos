@@ -37,7 +37,7 @@ export const CategoriesFilterComponent = (
                     const isActive = selectedCategories.includes(category);
                     return (
                     <Button 
-                        key={category._id} 
+                        key={category.id} 
                         variant={isActive ? "default" : "outline"} 
                         size="sm"
                         onClick={() => toggleCategory(category)}
